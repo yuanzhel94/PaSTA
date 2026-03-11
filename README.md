@@ -97,4 +97,4 @@ pef, rX, nef, run_status, n_parc, p_naive, fc_para1, fc_para2 = pasta.effective_
 ## Documentation
 
 For full documentation and additional examples, see
-[PaSTA documentation](https://brainspice.readthedocs.io/en/latest/index.html)
+[PaSTA documentation](https://brainpasta.readthedocs.io/en/latest/)
