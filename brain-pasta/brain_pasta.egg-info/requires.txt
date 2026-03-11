@@ -1,0 +1,5 @@
+numpy<2.0,>=1.26
+scipy>=1.13
+scikit-learn>=1.6
+scikit-learn-extra>=0.3
+setuptools

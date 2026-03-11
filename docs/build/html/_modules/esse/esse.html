@@ -1,0 +1,839 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>esse.esse &mdash; ESSE 0.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/customWidth.css?v=c9aa5cfe" />
+      <link rel="stylesheet" type="text/css" href="../../_static/code-tabs.css?v=1bc26e2f" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=7026087e"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../_static/code-tabs.js?v=c983d12e"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ESSE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../pages/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pages/start.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pages/example.html">Advanced examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/esse.html">API documentation (Python)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pages/references.html">Referecnes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ESSE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">esse.esse</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for esse.esse</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">pdist</span><span class="p">,</span> <span class="n">squareform</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">stats</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">curve_fit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.cluster</span><span class="w"> </span><span class="kn">import</span> <span class="n">KMeans</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn_extra.cluster</span><span class="w"> </span><span class="kn">import</span> <span class="n">KMedoids</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">pearsonr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">t</span> <span class="k">as</span> <span class="n">t_dist</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">setuptools</span>
+
+
+<div class="viewcode-block" id="estimate_variogram">
+<a class="viewcode-back" href="../../api/esse.html#esse.esse.estimate_variogram">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">estimate_variogram</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">M</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">qd</span><span class="p">:</span><span class="nb">float</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Estimate the empirical variogram from distance matrix between vertices,</span>
+<span class="sd">    and data value at each vertex. Estimation performed in M bins, ranging</span>
+<span class="sd">    from min_distance to qd * max_distance, where min_distance and</span>
+<span class="sd">    max_distance are the min and max distance in the distance matrix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    D : ndarray (N, N)</span>
+<span class="sd">        Distance matrix between all vertices.</span>
+<span class="sd">    data : ndarray (N,)</span>
+<span class="sd">        Data value at each vertex.</span>
+<span class="sd">    M : int</span>
+<span class="sd">        Number of bins to estimate variogram.</span>
+<span class="sd">    qd : float</span>
+<span class="sd">        Determine the maximum distance to evaluate variogram.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    v : ndarray (M,)</span>
+<span class="sd">        Estimated variogram values, i.e., semivariance.</span>
+<span class="sd">    h : ndarray (M,)</span>
+<span class="sd">        Lag distances.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This is similar to variogram estimation in BrainSMASH but determining</span>
+<span class="sd">    the max distance evaluated in a different way.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">Dmax</span> <span class="o">=</span> <span class="n">qd</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+    <span class="n">Dmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">D</span><span class="p">[</span><span class="n">D</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span>
+    
+    <span class="c1"># Upper triangle without diagonal</span>
+    <span class="n">triu_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu_indices_from</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">dval</span> <span class="o">=</span> <span class="n">D</span><span class="p">[</span><span class="n">triu_indices</span><span class="p">]</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="n">triu_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">col</span> <span class="o">=</span> <span class="n">triu_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">dval</span> <span class="o">&lt;=</span> <span class="n">Dmax</span> <span class="c1">#data pairs falling within the distance range of analysis</span>
+    <span class="n">dval</span> <span class="o">=</span> <span class="n">dval</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="n">col</span> <span class="o">=</span> <span class="n">col</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+
+    <span class="n">h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">Dmin</span><span class="p">,</span> <span class="n">Dmax</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span> <span class="c1"># linearly spaced lag distances</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="p">(</span><span class="n">Dmax</span> <span class="o">-</span> <span class="n">Dmin</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span> 
+    <span class="n">sigma</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">delta</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+    <span class="c1"># variogram estimation using gaussian smoothing kernel, same as BrainSMASH</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="mf">2.68</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">dval</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">diff_sq</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">diff_sq</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">v</span><span class="p">,</span> <span class="n">h</span></div>
+
+
+
+<div class="viewcode-block" id="fit_variogram">
+<a class="viewcode-back" href="../../api/esse.html#esse.esse.fit_variogram">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fit_variogram</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">PrecomputedVariance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nugget</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Fit a stable variogram model to an empirical variogram.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    h : (M,) ndarray</span>
+<span class="sd">        Empirical lag distances.</span>
+<span class="sd">    v : (M,) ndarray</span>
+<span class="sd">        Empirical semivariance evaluated at lag distances ``h``.</span>
+<span class="sd">    D : (N, N) ndarray</span>
+<span class="sd">        Pairwise distance matrix between spatial locations.</span>
+<span class="sd">    PrecomputedVariance : float or None, optional</span>
+<span class="sd">        Precomputed sill (total variance) as initial guess for optimization. If ``None``, the sill is</span>
+<span class="sd">        estimated as the maximum value of ``v``.</span>
+<span class="sd">    nugget : bool, default=True</span>
+<span class="sd">        Whether to include a nugget term in the fitted model.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    c_para : (N, N) ndarray</span>
+<span class="sd">        Fitted covariance matrix derived from the stable variogram model.</span>
+<span class="sd">    b : (4,) ndarray</span>
+<span class="sd">        Estimated stable model parameters in the order</span>
+<span class="sd">        ``(sill, range, exponent, nugget)``.</span>
+<span class="sd">    f : callable</span>
+<span class="sd">        Variogram function. ``f(h)`` returns the semivariance at lag</span>
+<span class="sd">        distance ``h``.</span>
+<span class="sd">    fcov : callable</span>
+<span class="sd">        Covariance function. ``fcov(h)`` returns the covariance at lag</span>
+<span class="sd">        distance ``h``.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The fitted model follows a stable variogram parameterization. The nugget</span>
+<span class="sd">    term should be included for better fit. </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="n">PrecomputedVariance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">PrecomputedVariance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">PrecomputedVariance</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">h</span><span class="p">),</span> <span class="mf">1.</span><span class="p">])</span> <span class="c1"># initial guess of stable variogram parameters</span>
+    <span class="n">lb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])</span> <span class="c1"># lower bound of estimation</span>
+    <span class="n">ub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">2</span><span class="o">*</span><span class="n">PrecomputedVariance</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="mf">2.</span><span class="p">])</span> <span class="c1"># upper bound of estimation, set ub of sill to 2*PrecomputedVariance for stable inference</span>
+    <span class="c1"># fit variogram model</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">nugget</span><span class="p">:</span>
+        <span class="n">b</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">stable_variogram_no_nugget</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="n">lb</span><span class="p">,</span> <span class="n">ub</span><span class="p">))</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+        <span class="n">lb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lb</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+        <span class="n">ub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ub</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">PrecomputedVariance</span><span class="p">)</span> <span class="c1"># set ub for nugget for stable inference at extreme short-range autocorrelation</span>
+        <span class="n">b</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">stable_variogram</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="n">lb</span><span class="p">,</span> <span class="n">ub</span><span class="p">))</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="n">stable_variogram</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">fcov</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="n">stable_covariance_func</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">c_para</span> <span class="o">=</span> <span class="n">fcov</span><span class="p">(</span><span class="n">D</span><span class="p">)</span> <span class="c1"># off-diagonal components of covariance matrix</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">c_para</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="c1"># diagonal set to sill + nugget</span>
+    
+    <span class="k">return</span> <span class="n">c_para</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">fcov</span></div>
+
+
+
+<div class="viewcode-block" id="stable_variogram_no_nugget">
+<a class="viewcode-back" href="../../api/esse.html#esse.esse.stable_variogram_no_nugget">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">stable_variogram_no_nugget</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">b3</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    stable variogram model without nugget, defined as: semivariance = sill * (1-exp(-(h/range)**shape))</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    h : float or ndarray</span>
+<span class="sd">        lag distance to be evaluated</span>
+<span class="sd">    b1 : float</span>
+<span class="sd">        sill</span>
+<span class="sd">    b2 : float</span>
+<span class="sd">        range parameter</span>
+<span class="sd">    b3 : float</span>
+<span class="sd">        shape</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float or ndarray</span>
+<span class="sd">        senuvaruabce at lag distance h</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">b1</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">h</span> <span class="o">/</span> <span class="n">b2</span><span class="p">)</span> <span class="o">**</span> <span class="n">b3</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="stable_variogram">
+<a class="viewcode-back" href="../../api/esse.html#esse.esse.stable_variogram">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">stable_variogram</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">b3</span><span class="p">,</span> <span class="n">b4</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Stable variogram model without nugget, defined as:</span>
+<span class="sd">    semivariance = sill * (1 - exp(-(h / range)**shape))</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    h : float or ndarray</span>
+<span class="sd">        Lag distance to be evaluated.</span>
+<span class="sd">    b1 : float</span>
+<span class="sd">        Sill.</span>
+<span class="sd">    b2 : float</span>
+<span class="sd">        Range parameter.</span>
+<span class="sd">    b3 : float</span>
+<span class="sd">        Shape.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float or ndarray</span>
+<span class="sd">        Semivariance at lag distance ``h``.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">b1</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">h</span> <span class="o">/</span> <span class="n">b2</span><span class="p">)</span> <span class="o">**</span> <span class="n">b3</span><span class="p">))</span> <span class="o">+</span> <span class="n">b4</span></div>
+
+
+<div class="viewcode-block" id="stable_covariance_func">
+<a class="viewcode-back" href="../../api/esse.html#esse.esse.stable_covariance_func">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">stable_covariance_func</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Covariance function based on stable variogram model for observations with</span>
+<span class="sd">    distance h.</span>
+
+<span class="sd">    Equivalent to:</span>
+<span class="sd">    (sill + nugget) - (sill * (1 - exp(-(h / range)**shape)) + nugget)</span>
+<span class="sd">    = sill * exp(-(h / range)**shape) for h &gt; 0.</span>
+
+<span class="sd">    When h == 0, set to sill + nugget, which is not computed here.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    h : float or ndarray</span>
+<span class="sd">        Lag distance at which to compute covariance.</span>
+<span class="sd">    b : ndarray</span>
+<span class="sd">        Parameters for stable models.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float or ndarray</span>
+<span class="sd">        Covariance at distance h.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">b3</span> <span class="o">=</span> <span class="n">b</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">h</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">b1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">h</span> <span class="o">/</span> <span class="n">b2</span><span class="p">)</span> <span class="o">**</span> <span class="n">b3</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="parc_data">
+<a class="viewcode-back" href="../../api/esse.html#esse.esse.parc_data">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">parc_data</span><span class="p">(</span><span class="n">parc</span><span class="p">,</span> <span class="n">c_para</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">max_clusters</span><span class="p">,</span> <span class="n">min_clusters</span><span class="p">,</span> <span class="n">min_cluster_size</span><span class="p">,</span> <span class="n">map_idx</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    parcellate data depending on setting to account for nonstationarity</span>
+
+<span class="sd">    3 scenarios:</span>
+<span class="sd">    1. parc is None: do not parcellate and return covariance matrix c_para as is (new variable name fc_para)</span>
+<span class="sd">    2. parc is string &#39;auto&#39;: determine the number of parcels based on estiamted range and shape parameter from stable variogram model (i.e., b[1] and b[2]), and parcellate data using spatial clustering</span>
+<span class="sd">    3. parc is user specified np int array with shape (M,) with each int indicating a unique parcel: return parc as is (new variable name parc_out), raise warning if risk of over-parcellation (compared to &#39;auto&#39;)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parc : either None, &#39;auto&#39;, or (N,)</span>
+<span class="sd">        specifying the setting of parcellation</span>
+<span class="sd">    c_para : covariance matrix estimated from stationary ESSE, i.e., without parcel</span>
+<span class="sd">    b : stable variogram model parameters estimated from stationary ESSE</span>
+<span class="sd">    D : distance matrix of data (N, N)</span>
+<span class="sd">    coord : (N, 3) spatial coordinates of data or None</span>
+<span class="sd">        If None, spatial clustering is conducted based on the distance matrix D with KMedoids</span>
+<span class="sd">    max_clusters : maximum number of parcellation, set to avoid over-parcellation at weak autocorrelation, e.g., spatial independence</span>
+<span class="sd">    min_clusters : minimum number of parcellation, set to 1 will allow nonstatioanry ESSE to collapse to stationary ESSE. This was used to mandate parcellation and test difference between sESSE and nESSE in the manuscript.</span>
+<span class="sd">    min_cluster_size : set to avoid too small parcellations, we set to 500 in fsaverage5 mesh with 10k vertices</span>
+<span class="sd">    map_idx : used to identify the map evaluated when raise warning</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    parc_out : None when there is no subdivision of parcels, or (N,) of int where each unique int indicate a parcel</span>
+<span class="sd">    n_parc : number of parcels</span>
+<span class="sd">    unique_parcs : index of unique parcels</span>
+<span class="sd">    fc_para : covariance matrix, either as c_para (when no parcellation) or zeros (parcellated)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">parc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># if None, return covariance matrix as is</span>
+        <span class="n">fc_para</span> <span class="o">=</span> <span class="n">c_para</span>
+        <span class="n">n_parc</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">unique_parcs</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">parc_out</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># if not None, first compute number of parcels in data-driven manner depending on the strength of autocorrelation (i.e., the effective range of variogram)</span>
+        <span class="n">range_len</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mf">2.996</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="c1"># effective range</span>
+        <span class="n">nPoints</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">D</span> <span class="o">&lt;</span> <span class="n">range_len</span><span class="p">)</span> <span class="o">/</span> <span class="n">D</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">min_cluster_size</span><span class="p">])</span> <span class="c1"># number of points per parcel on average, when parcel radius ~ effectuve rabge</span>
+        <span class="n">n_clusters</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">nPoints</span><span class="p">),</span> <span class="n">max_clusters</span><span class="p">]),</span><span class="n">min_clusters</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="c1"># number of parcels</span>
+        <span class="k">if</span> <span class="n">parc</span> <span class="o">==</span> <span class="s1">&#39;auto&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">coord</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># spatial clustering via Kmeans on coordinates</span>
+                <span class="n">parc_out</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span><span class="o">.</span><span class="n">labels_</span> <span class="c1"># if coord available use kmeans</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1"># spatial clustering via KMedoids on distance matrix</span>
+                <span class="n">parc_out</span> <span class="o">=</span> <span class="n">KMedoids</span><span class="p">(</span><span class="n">n_clusters</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">D</span><span class="p">)</span><span class="o">.</span><span class="n">labels_</span> <span class="c1"># if coord not available use kmedoids</span>
+            <span class="n">unique_parcs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">parc_out</span><span class="p">)</span>
+            <span class="n">n_parc</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_parcs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c1"># if user specified parcel, raise waring if risk of over-parcellation (more than estimated by &#39;auto&#39;)</span>
+            <span class="n">parc_out</span> <span class="o">=</span> <span class="n">parc</span> <span class="c1"># parcellation returned as is</span>
+            <span class="n">unique_parcs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">parc_out</span><span class="p">)</span>
+            <span class="n">n_parc</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_parcs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">n_parc</span> <span class="o">&gt;</span> <span class="n">n_clusters</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;data No.</span><span class="si">{</span><span class="n">map_idx</span><span class="si">}</span><span class="s1">: specified number of parcs </span><span class="si">{</span><span class="n">n_parc</span><span class="si">}</span><span class="s1"> is larger than data-derived max number of parcs </span><span class="si">{</span><span class="n">n_clusters</span><span class="si">}</span><span class="s1">, carefully trade off the ability for detecting nonstationarity and the parcel coverage for robust estimation.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_parc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># if does not subdivide, return covariance matrix as is</span>
+            <span class="n">fc_para</span> <span class="o">=</span> <span class="n">c_para</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c1"># if subdivide, initialize and return a covariance matrix of zeros that will be filled in later steps, i.e., nESSE</span>
+            <span class="n">fc_para</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">c_para</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">parc_out</span><span class="p">,</span> <span class="n">n_parc</span><span class="p">,</span> <span class="n">unique_parcs</span><span class="p">,</span> <span class="n">fc_para</span></div>
+
+
+
+<div class="viewcode-block" id="effective_sample_size_estimation">
+<a class="viewcode-back" href="../../api/esse.html#esse.esse.effective_sample_size_estimation">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">effective_sample_size_estimation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">coord</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">qd</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">xparc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yparc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_clusters</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">min_cluster_size</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">min_clusters</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">M_cluster</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nugget</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Main function that runs sESSE and nESSE to compute effective sample size</span>
+<span class="sd">    and autocorrelation-corrected p-values.</span>
+
+<span class="sd">    Leave xparc=None and yparc=None will run sESSE, while setting to &#39;auto&#39;</span>
+<span class="sd">    or user-specified parcellation np int array (N,) will run nESSE.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x, y : ndarray (N,)</span>
+<span class="sd">        Spatial map data to evaluate association. Can contain missing values</span>
+<span class="sd">        such as NaN and Inf.</span>
+<span class="sd">    coord : ndarray (N, 3) or None</span>
+<span class="sd">        Spatial coordinates for observations. When unknown and left as None,</span>
+<span class="sd">        the function requires D to run sESSE, and D and dim to run nESSE.</span>
+<span class="sd">    D : ndarray (N, N) or None</span>
+<span class="sd">        Distance matrix. When left as None, computed from coord.</span>
+<span class="sd">    dim : int or None</span>
+<span class="sd">        Spatial dimension of data. When left as None, computed as</span>
+<span class="sd">        coord.shape[1] if needed.</span>
+<span class="sd">    M : int or None</span>
+<span class="sd">        Number of lag distances to evaluate when estimating variogram —</span>
+<span class="sd">        important hyperparameter that determines the quality of variogram</span>
+<span class="sd">        estimation, large values preferred. When set to None, use</span>
+<span class="sd">        3*sqrt(N) as default.</span>
+<span class="sd">    qd : float (0, 1]</span>
+<span class="sd">        Determine the coverage of lag distances evaluated in variogram,</span>
+<span class="sd">        with maximum distance evaluated being qd*np.max(D) — important</span>
+<span class="sd">        hyperparameter that determines the quality of variogram estimation,</span>
+<span class="sd">        large values preferred. Default 0.7.</span>
+<span class="sd">    xparc : None, &#39;auto&#39;, or ndarray (N,)</span>
+<span class="sd">        Parcellation setting for map x. If ndarray, index should begin from</span>
+<span class="sd">        0, i.e., 0 to Np - 1 if Np parcels specified.</span>
+<span class="sd">    yparc : None, &#39;auto&#39;, or ndarray (N,)</span>
+<span class="sd">        Parcellation setting for map y. If ndarray, index should begin from</span>
+<span class="sd">        0, i.e., 0 to Np - 1 if Np parcels specified.</span>
+<span class="sd">    max_clusters : int</span>
+<span class="sd">        Maximum number of parcellations allowed in nESSE.</span>
+<span class="sd">    min_clusters : int</span>
+<span class="sd">        Minimum number of parcellations allowed in nESSE.</span>
+<span class="sd">    min_cluster_size : int</span>
+<span class="sd">        Minimum size of parcellations (# observations per parcel).</span>
+<span class="sd">    M_cluster : int or None</span>
+<span class="sd">        Number of lag distances to evaluate in nESSE parcels when estimating</span>
+<span class="sd">        their variograms. When set to None, default to 3*sqrt(Np), where Np</span>
+<span class="sd">        is the number of observations in each parcel.</span>
+<span class="sd">    nugget : bool</span>
+<span class="sd">        Indicator of whether use nugget in variogram models or not.</span>
+<span class="sd">        Default True because nugget helps with discontinuity at short</span>
+<span class="sd">        distances, and setting to False can result in problems especially</span>
+<span class="sd">        when data are nonstationary.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pef : float</span>
+<span class="sd">        Significance p-values based on ESSE.</span>
+<span class="sd">    rX : float</span>
+<span class="sd">        Pearson correlation coefficient between x and y.</span>
+<span class="sd">    nef : float</span>
+<span class="sd">        Effective sample size estimated.</span>
+<span class="sd">    run_status : int</span>
+<span class="sd">        1 indicates successful run, and 0 indicates unsuccessful run such</span>
+<span class="sd">        as when nef &lt; 2 and data are too smooth to infer significance.</span>
+<span class="sd">    n_parc : ndarray (2,)</span>
+<span class="sd">        [xn_parc, yn_parc] that indicates the number of parcels for each</span>
+<span class="sd">        map in nESSE.</span>
+<span class="sd">    p_naive : float</span>
+<span class="sd">        Significance with independence assumption and without controlling</span>
+<span class="sd">        for autocorrelation.</span>
+<span class="sd">    fc_para1 : ndarray</span>
+<span class="sd">        Covariance matrix for map x, with Nvx indicating the number of</span>
+<span class="sd">        valid (finite value) observations in map x.</span>
+<span class="sd">    fc_para2 : ndarray</span>
+<span class="sd">        Covariance matrix for map y, with Nvy indicating the number of</span>
+<span class="sd">        valid (finite value) observations in map y.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">assert</span> <span class="p">(</span><span class="n">coord</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">D</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">),</span> <span class="s1">&#39;at least one of coord and D is required&#39;</span>
+    <span class="k">assert</span> <span class="p">((</span><span class="n">coord</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">dim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="n">xparc</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">yparc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">),</span> <span class="s1">&#39;dim is required for nonstationary ESSE when coord is not provided&#39;</span>
+    <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">D</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">D</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">valid</span><span class="p">,</span> <span class="n">valid</span><span class="p">)]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">coord</span> <span class="o">=</span> <span class="n">coord</span><span class="p">[</span><span class="n">valid</span><span class="p">,:]</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">squareform</span><span class="p">(</span><span class="n">pdist</span><span class="p">(</span><span class="n">coord</span><span class="p">))</span>
+        <span class="n">dim</span> <span class="o">=</span> <span class="n">coord</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">M</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+
+    <span class="n">PrecomputedVariance</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">v1</span><span class="p">,</span><span class="n">h1</span> <span class="o">=</span> <span class="n">estimate_variogram</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">qd</span><span class="p">)</span>
+    <span class="n">v2</span><span class="p">,</span><span class="n">h2</span> <span class="o">=</span> <span class="n">estimate_variogram</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">qd</span><span class="p">)</span>
+    <span class="n">c_para1</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">f1</span><span class="p">,</span> <span class="n">fcov1</span> <span class="o">=</span> <span class="n">fit_variogram</span><span class="p">(</span><span class="n">h1</span><span class="p">,</span><span class="n">v1</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">PrecomputedVariance</span><span class="p">,</span><span class="n">nugget</span><span class="p">)</span>
+    <span class="n">c_para2</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">fcov2</span> <span class="o">=</span> <span class="n">fit_variogram</span><span class="p">(</span><span class="n">h2</span><span class="p">,</span><span class="n">v2</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">PrecomputedVariance</span><span class="p">,</span><span class="n">nugget</span><span class="p">)</span>
+
+    <span class="n">xparc</span><span class="p">,</span> <span class="n">xn_parc</span><span class="p">,</span> <span class="n">xunique_parcs</span><span class="p">,</span> <span class="n">fc_para1</span> <span class="o">=</span> <span class="n">parc_data</span><span class="p">(</span><span class="n">xparc</span><span class="p">,</span> <span class="n">c_para1</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">max_clusters</span><span class="p">,</span> <span class="n">min_clusters</span><span class="p">,</span> <span class="n">min_cluster_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">yparc</span><span class="p">,</span> <span class="n">yn_parc</span><span class="p">,</span> <span class="n">yunique_parcs</span><span class="p">,</span> <span class="n">fc_para2</span> <span class="o">=</span> <span class="n">parc_data</span><span class="p">(</span><span class="n">yparc</span><span class="p">,</span> <span class="n">c_para2</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">max_clusters</span><span class="p">,</span> <span class="n">min_clusters</span><span class="p">,</span> <span class="n">min_cluster_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">xn_parc</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">exponent1</span> <span class="o">=</span> <span class="n">b1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">fc_para1</span><span class="p">,</span> <span class="n">pb1</span> <span class="o">=</span> <span class="n">fit_covariance_blocks</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">xn_parc</span><span class="p">,</span> <span class="n">xparc</span><span class="p">,</span> <span class="n">M_cluster</span><span class="p">,</span> <span class="n">qd</span><span class="p">,</span> <span class="n">nugget</span><span class="p">,</span> <span class="n">exponent1</span><span class="p">)</span>
+        <span class="n">fc_para1</span> <span class="o">=</span> <span class="n">process_convolution_crossblocks</span><span class="p">(</span><span class="n">fc_para1</span><span class="p">,</span> <span class="n">pb1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">xn_parc</span><span class="p">,</span> <span class="n">xparc</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">exponent1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">yn_parc</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">exponent2</span> <span class="o">=</span> <span class="n">b2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">fc_para2</span><span class="p">,</span> <span class="n">pb2</span> <span class="o">=</span> <span class="n">fit_covariance_blocks</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">yn_parc</span><span class="p">,</span> <span class="n">yparc</span><span class="p">,</span> <span class="n">M_cluster</span><span class="p">,</span> <span class="n">qd</span><span class="p">,</span> <span class="n">nugget</span><span class="p">,</span> <span class="n">exponent2</span><span class="p">)</span>
+        <span class="n">fc_para2</span> <span class="o">=</span> <span class="n">process_convolution_crossblocks</span><span class="p">(</span><span class="n">fc_para2</span><span class="p">,</span> <span class="n">pb2</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">yn_parc</span><span class="p">,</span> <span class="n">yparc</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">exponent2</span><span class="p">)</span>
+
+    <span class="n">nef</span> <span class="o">=</span> <span class="n">cov2nef</span><span class="p">(</span><span class="n">fc_para1</span><span class="p">,</span><span class="n">fc_para2</span><span class="p">)</span>
+    <span class="n">run_status</span> <span class="o">=</span> <span class="n">nef</span> <span class="o">&gt;</span> <span class="mi">2</span>
+
+    <span class="n">rX</span><span class="p">,</span> <span class="n">p_naive</span> <span class="o">=</span> <span class="n">pearsonr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">run_status</span><span class="p">:</span>
+        <span class="n">pef</span> <span class="o">=</span> <span class="n">nef2p</span><span class="p">(</span><span class="n">rX</span><span class="p">,</span> <span class="n">nef</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pef</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">n_parc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">xn_parc</span><span class="p">,</span> <span class="n">yn_parc</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">pef</span><span class="p">,</span> <span class="n">rX</span><span class="p">,</span> <span class="n">nef</span><span class="p">,</span> <span class="n">run_status</span><span class="p">,</span> <span class="n">n_parc</span><span class="p">,</span> <span class="n">p_naive</span><span class="p">,</span> <span class="n">fc_para1</span><span class="p">,</span> <span class="n">fc_para2</span></div>
+
+
+<div class="viewcode-block" id="covariance_estimation">
+<a class="viewcode-back" href="../../api/esse.html#esse.esse.covariance_estimation">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">covariance_estimation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">coord</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">qd</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">xparc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_clusters</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">min_cluster_size</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">min_clusters</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">M_cluster</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nugget</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Compute the covariance matrix for a single map x using sESSE or nESSE.</span>
+
+<span class="sd">    This can be particularly useful when pairwise association between a</span>
+<span class="sd">    large number of maps needs to be evaluated. Compute the covariance</span>
+<span class="sd">    matrix for each data separately and save for later use can avoid</span>
+<span class="sd">    repetitive covariance estimation in the</span>
+<span class="sd">    effective_sample_size_estimation function.</span>
+
+<span class="sd">    Statistical significance between two maps can be inferred by loading</span>
+<span class="sd">    saved covariance matrices (cov1 and cov2) of two maps (x and y), and</span>
+<span class="sd">    compute effective sample size and p-values following steps below:</span>
+
+<span class="sd">    get submatrix of covariance matrices for points that are valid in both</span>
+<span class="sd">    maps - valid = np.isfinite(x) &amp; np.isfinite(y),</span>
+<span class="sd">    cov1 = cov1[np.ix_(valid, valid)],</span>
+<span class="sd">    cov2 = cov2[np.ix_(valid, valid)],</span>
+<span class="sd">    x = x[valid], y = y[valid]</span>
+
+<span class="sd">    compute nef - cov2nef(cov1, cov2)</span>
+
+<span class="sd">    compute test statistics such as Pearson correlation coefficient —</span>
+<span class="sd">    rX, p_naive = pearsonr(x, y)</span>
+
+<span class="sd">    compute significance p-value from test statistics and effective sample</span>
+<span class="sd">    size: nef2p(rX, nef)</span>
+
+<span class="sd">        Inputs are same as in effective_sample_size_estimation but with y and yparc removed</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    covmat : ndarray (N, N)</span>
+<span class="sd">        Covariance matrix of map x in shape (N, N), where rows and columns</span>
+<span class="sd">        corresponding to invalid observations in x (e.g., NaN, Inf) are set</span>
+<span class="sd">        to np.nan and need to be removed before computing nef.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">assert</span> <span class="p">(</span><span class="n">coord</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">D</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">),</span> <span class="s1">&#39;at least one of coord and D is required&#39;</span>
+    <span class="k">assert</span> <span class="p">((</span><span class="n">coord</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">dim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="n">xparc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">),</span> <span class="s1">&#39;dim is required for nonstationary ESSE when coord is not provided&#39;</span>
+    <span class="n">nx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">covmat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">nx</span><span class="p">,</span> <span class="n">nx</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">D</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">D</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">valid</span><span class="p">,</span> <span class="n">valid</span><span class="p">)]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">coord</span> <span class="o">=</span> <span class="n">coord</span><span class="p">[</span><span class="n">valid</span><span class="p">,:]</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">squareform</span><span class="p">(</span><span class="n">pdist</span><span class="p">(</span><span class="n">coord</span><span class="p">))</span>
+        <span class="n">dim</span> <span class="o">=</span> <span class="n">coord</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">M</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+
+    <span class="n">PrecomputedVariance</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">v1</span><span class="p">,</span><span class="n">h1</span> <span class="o">=</span> <span class="n">estimate_variogram</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">qd</span><span class="p">)</span>
+    <span class="n">c_para1</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">f1</span><span class="p">,</span> <span class="n">fcov1</span> <span class="o">=</span> <span class="n">fit_variogram</span><span class="p">(</span><span class="n">h1</span><span class="p">,</span><span class="n">v1</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">PrecomputedVariance</span><span class="p">,</span><span class="n">nugget</span><span class="p">)</span>
+
+    <span class="n">xparc</span><span class="p">,</span> <span class="n">xn_parc</span><span class="p">,</span> <span class="n">xunique_parcs</span><span class="p">,</span> <span class="n">fc_para1</span> <span class="o">=</span> <span class="n">parc_data</span><span class="p">(</span><span class="n">xparc</span><span class="p">,</span> <span class="n">c_para1</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">max_clusters</span><span class="p">,</span> <span class="n">min_clusters</span><span class="p">,</span> <span class="n">min_cluster_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">xn_parc</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">exponent1</span> <span class="o">=</span> <span class="n">b1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">fc_para1</span><span class="p">,</span> <span class="n">pb1</span> <span class="o">=</span> <span class="n">fit_covariance_blocks</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">xn_parc</span><span class="p">,</span> <span class="n">xparc</span><span class="p">,</span> <span class="n">M_cluster</span><span class="p">,</span> <span class="n">qd</span><span class="p">,</span> <span class="n">nugget</span><span class="p">,</span> <span class="n">exponent1</span><span class="p">)</span>
+        <span class="n">fc_para1</span> <span class="o">=</span> <span class="n">process_convolution_crossblocks</span><span class="p">(</span><span class="n">fc_para1</span><span class="p">,</span> <span class="n">pb1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">xn_parc</span><span class="p">,</span> <span class="n">xparc</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">exponent1</span><span class="p">)</span>
+    
+    <span class="n">covmat</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">valid</span><span class="p">,</span><span class="n">valid</span><span class="p">)]</span> <span class="o">=</span> <span class="n">fc_para1</span>
+    <span class="k">return</span> <span class="n">covmat</span></div>
+
+
+
+<div class="viewcode-block" id="cov2nef">
+<a class="viewcode-back" href="../../api/esse.html#esse.esse.cov2nef">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">cov2nef</span><span class="p">(</span><span class="n">c_para1</span><span class="p">,</span> <span class="n">c_para2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Compute effective sample size from covariance matrices c_para1 and</span>
+<span class="sd">    c_para2.</span>
+
+<span class="sd">    Is a computational efficient implementation equivalent to::</span>
+
+<span class="sd">        nef=real(1/(trace(B*fc_para1*B*fc_para2)/(trace(B*fc_para1)*trace(B*fc_para2)))+1);</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    c_para1 : ndarray</span>
+<span class="sd">        Covariance matrix.</span>
+<span class="sd">    c_para2 : ndarray</span>
+<span class="sd">        Covariance matrix.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    nef : float</span>
+<span class="sd">        Effective sample size.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="n">c_para1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">c_para1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">c_para1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">c_para1</span><span class="p">)</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">c_para2</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">c_para2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">c_para2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">c_para2</span><span class="p">)</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">c1</span> <span class="o">@</span> <span class="n">c2</span><span class="p">)</span>
+    <span class="n">den</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">c2</span><span class="p">)</span>
+    <span class="n">nef</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">num</span> <span class="o">/</span> <span class="n">den</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">nef</span></div>
+
+
+<div class="viewcode-block" id="nef2p">
+<a class="viewcode-back" href="../../api/esse.html#esse.esse.nef2p">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">nef2p</span><span class="p">(</span><span class="n">rX</span><span class="p">,</span> <span class="n">nef</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Infer statistical significance p-value from test statistics rX and</span>
+<span class="sd">    effective sample size nef.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rX : float</span>
+<span class="sd">        Test statistic.</span>
+<span class="sd">    nef : float</span>
+<span class="sd">        Effective sample size.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    p : float</span>
+<span class="sd">        Statistical significance p-value.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nef</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">df</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">rX</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">df</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">rX</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">t_dist</span><span class="o">.</span><span class="n">sf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">p</span></div>
+
+
+<div class="viewcode-block" id="fit_covariance_blocks">
+<a class="viewcode-back" href="../../api/esse.html#esse.esse.fit_covariance_blocks">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fit_covariance_blocks</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">n_clusters</span><span class="p">,</span> <span class="n">point_cluster_idx</span><span class="p">,</span> <span class="n">M_cluster</span><span class="p">,</span> <span class="n">qd</span><span class="p">,</span> <span class="n">nugget</span><span class="p">,</span> <span class="n">exponent</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Fit variogram model for each parcel and compute the diagonal blocks of</span>
+<span class="sd">    nonstationary covariance matrix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : ndarray (N,)</span>
+<span class="sd">        Spatial map data to evaluate association. All values are valid.</span>
+<span class="sd">    D : ndarray (N, N)</span>
+<span class="sd">        Distance matrix.</span>
+<span class="sd">    n_clusters : int</span>
+<span class="sd">        Number of parcels.</span>
+<span class="sd">    point_cluster_idx : ndarray (N,)</span>
+<span class="sd">        Int array specifying parcellation settings for map x, ranging from</span>
+<span class="sd">        0 to NP-1 if NP parcels.</span>
+<span class="sd">    M_cluster : int or None</span>
+<span class="sd">        Number of lag distances to evaluate in parcel when estimating their</span>
+<span class="sd">        variograms. When set to None, default to 3*sqrt(Np), where Np is</span>
+<span class="sd">        the number of observations in each parcel.</span>
+<span class="sd">    qd : float (0, 1]</span>
+<span class="sd">    nugget : bool</span>
+<span class="sd">        Indicator of whether use nugget in variogram models or not.</span>
+<span class="sd">    exponent : float</span>
+<span class="sd">        Shape parameter estimated using global stationary variogram model.</span>
+<span class="sd">        This will be kept the same across parcels to obtain valid</span>
+<span class="sd">        nonstationary covariance expression (i.e., PSD matrix).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    c_para : ndarray (N, N)</span>
+<span class="sd">        Covariance matrix for map x, where within parcel covariance are</span>
+<span class="sd">        estimated but cross-parcel elements are set to 0.</span>
+<span class="sd">    b : ndarray (n_clusters, 4)</span>
+<span class="sd">        Stable variogram model parameters, each row corresponds a parcel.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">c_para</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="c1"># initiation</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n_clusters</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+    <span class="n">computeM</span> <span class="o">=</span> <span class="p">(</span><span class="n">M_cluster</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_clusters</span><span class="p">):</span>
+        <span class="n">v_select</span> <span class="o">=</span> <span class="n">point_cluster_idx</span> <span class="o">==</span> <span class="n">i</span>
+        <span class="n">x_select</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">v_select</span><span class="p">]</span>
+        <span class="n">var_x_select</span> <span class="o">=</span> <span class="n">x_select</span><span class="o">.</span><span class="n">var</span><span class="p">()</span>
+        <span class="n">x_select</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">x_select</span><span class="p">)</span>
+        <span class="n">D_select</span> <span class="o">=</span> <span class="n">D</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">v_select</span><span class="p">,</span> <span class="n">v_select</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">computeM</span><span class="p">:</span>
+            <span class="n">M_cluster</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x_select</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">v</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">estimate_variogram</span><span class="p">(</span><span class="n">D_select</span><span class="p">,</span> <span class="n">x_select</span><span class="p">,</span> <span class="n">M_cluster</span><span class="p">,</span> <span class="n">qd</span><span class="p">)</span>
+        <span class="n">pc_para</span><span class="p">,</span> <span class="n">pb</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">fcov</span> <span class="o">=</span> <span class="n">fit_variogram_fixed_exponent</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">D_select</span><span class="p">,</span> <span class="n">exponent</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nugget</span><span class="p">)</span>
+        <span class="n">c_para</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">v_select</span><span class="p">,</span> <span class="n">v_select</span><span class="p">)]</span> <span class="o">=</span> <span class="n">pc_para</span> <span class="o">*</span> <span class="n">var_x_select</span>
+        <span class="n">pb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">pb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">var_x_select</span>
+        <span class="n">pb</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">pb</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">var_x_select</span>
+        <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">pb</span>
+    <span class="k">return</span> <span class="n">c_para</span><span class="p">,</span> <span class="n">b</span></div>
+
+
+<div class="viewcode-block" id="fit_variogram_fixed_exponent">
+<a class="viewcode-back" href="../../api/esse.html#esse.esse.fit_variogram_fixed_exponent">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fit_variogram_fixed_exponent</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">exponent</span><span class="p">,</span> <span class="n">PrecomputedVariance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nugget</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Same as fit_variogram, but for stable model with predetermined</span>
+<span class="sd">    range parameter.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    h : ndarray</span>
+<span class="sd">    v : ndarray</span>
+<span class="sd">    D : ndarray</span>
+<span class="sd">    exponent : float</span>
+<span class="sd">    PrecomputedVariance : float or None</span>
+<span class="sd">    nugget : bool</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    c_para : ndarray</span>
+<span class="sd">    b : ndarray</span>
+<span class="sd">    f : callable</span>
+<span class="sd">    fcov : callable</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">PrecomputedVariance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">PrecomputedVariance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">PrecomputedVariance</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">h</span><span class="p">)])</span>
+    <span class="n">lb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])</span>
+    <span class="n">ub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">2</span><span class="o">*</span><span class="n">PrecomputedVariance</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">])</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">nugget</span><span class="p">:</span>
+        <span class="n">b</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="k">lambda</span> <span class="n">h</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">:</span> <span class="n">stable_variogram_fixed_exp_no_nugget</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">exponent</span><span class="p">),</span> <span class="n">h</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="n">lb</span><span class="p">,</span> <span class="n">ub</span><span class="p">))</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">exponent</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+        <span class="n">lb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lb</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+        <span class="n">ub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ub</span><span class="p">,</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">PrecomputedVariance</span><span class="p">)</span> <span class="c1"># set ub for nugget to avoid inaccurate shape parameter fitting when no/very-short-range autocorrelation</span>
+        <span class="n">b</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="k">lambda</span> <span class="n">h</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">b3</span><span class="p">:</span> <span class="n">stable_variogram_fixed_exp</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">b3</span><span class="p">,</span> <span class="n">exponent</span><span class="p">),</span> <span class="n">h</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="n">lb</span><span class="p">,</span> <span class="n">ub</span><span class="p">))</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">exponent</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="n">stable_variogram</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">fcov</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="n">stable_covariance_func</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">c_para</span> <span class="o">=</span> <span class="n">fcov</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">c_para</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    
+    <span class="k">return</span> <span class="n">c_para</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">fcov</span></div>
+
+
+<div class="viewcode-block" id="stable_variogram_fixed_exp_no_nugget">
+<a class="viewcode-back" href="../../api/esse.html#esse.esse.stable_variogram_fixed_exp_no_nugget">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">stable_variogram_fixed_exp_no_nugget</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">fixed_exp</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Stable variogram with prespecified shape parameter, without nugget</span>
+<span class="sd">    (i.e., nugget set to 0).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    h : float or ndarray</span>
+<span class="sd">    b1 : float</span>
+<span class="sd">    b2 : float</span>
+<span class="sd">    fixed_exp : float</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float or ndarray</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">b1</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">h</span> <span class="o">/</span> <span class="n">b2</span><span class="p">)</span> <span class="o">**</span> <span class="n">fixed_exp</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="stable_variogram_fixed_exp">
+<a class="viewcode-back" href="../../api/esse.html#esse.esse.stable_variogram_fixed_exp">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">stable_variogram_fixed_exp</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">b3</span><span class="p">,</span> <span class="n">fixed_exp</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Stable variogram with prespecified shape parameter, with nugget.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    h : float or ndarray</span>
+<span class="sd">    b1 : float</span>
+<span class="sd">    b2 : float</span>
+<span class="sd">    b3 : float</span>
+<span class="sd">    fixed_exp : float</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float or ndarray</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">b1</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">h</span> <span class="o">/</span> <span class="n">b2</span><span class="p">)</span> <span class="o">**</span> <span class="n">fixed_exp</span><span class="p">))</span> <span class="o">+</span> <span class="n">b3</span></div>
+
+
+<div class="viewcode-block" id="process_convolution_crossblocks">
+<a class="viewcode-back" href="../../api/esse.html#esse.esse.process_convolution_crossblocks">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_convolution_crossblocks</span><span class="p">(</span><span class="n">c_para</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">n_clusters</span><span class="p">,</span> <span class="n">point_cluster_idx</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">exponent</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Process convolution to infer the cross-parcel covariance of</span>
+<span class="sd">    nonstationary covariance matrix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    c_para : ndarray (N, N)</span>
+<span class="sd">        Covariance matrix output from fit_covariance_blocks, where</span>
+<span class="sd">        covariances are estimated for within parcel pairs but not</span>
+<span class="sd">        cross-parcel.</span>
+<span class="sd">    b : ndarray (n_clusters, 4)</span>
+<span class="sd">        Fitted stable variogram model parameters, each row per parcel.</span>
+<span class="sd">    x : ndarray (N,)</span>
+<span class="sd">        Map data.</span>
+<span class="sd">    D : ndarray (N, N)</span>
+<span class="sd">        Distance matrix.</span>
+<span class="sd">    n_clusters : int</span>
+<span class="sd">        Number of parcels.</span>
+<span class="sd">    point_cluster_idx : ndarray (N,)</span>
+<span class="sd">        Int array starting from 0 indicating the membership of each</span>
+<span class="sd">        point to parcels.</span>
+<span class="sd">    dim : int</span>
+<span class="sd">        Spatial dimension of the data.</span>
+<span class="sd">    exponent : float</span>
+<span class="sd">        Shape parameter fitted using the global stationary variogram,</span>
+<span class="sd">        kept the same for valid PSD covariance matrix.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    c_para : ndarray (N, N)</span>
+<span class="sd">        Nonstationary covariance matrix by process convolution.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">v_select1</span> <span class="o">=</span> <span class="n">point_cluster_idx</span> <span class="o">==</span> <span class="n">i</span>
+        <span class="n">phi_i</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_clusters</span><span class="p">):</span>
+            <span class="n">v_select2</span> <span class="o">=</span> <span class="n">point_cluster_idx</span> <span class="o">==</span> <span class="n">j</span>
+            <span class="n">phi_j</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">D_select</span> <span class="o">=</span> <span class="n">D</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">v_select1</span><span class="p">,</span> <span class="n">v_select2</span><span class="p">)]</span>
+            <span class="n">sig</span> <span class="o">=</span> <span class="p">(</span><span class="n">phi_i</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">phi_j</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="n">Qij</span> <span class="o">=</span> <span class="n">D_select</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">sig</span>
+            <span class="n">c_para</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">v_select1</span><span class="p">,</span> <span class="n">v_select2</span><span class="p">)]</span> <span class="o">=</span> <span class="p">(</span><span class="n">phi_i</span> <span class="o">*</span> <span class="n">phi_j</span> <span class="o">/</span> <span class="n">sig</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">dim</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Qij</span><span class="p">)</span> <span class="o">**</span> <span class="n">exponent</span><span class="p">)</span>
+            <span class="n">c_para</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">v_select2</span><span class="p">,</span> <span class="n">v_select1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">c_para</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">v_select1</span><span class="p">,</span> <span class="n">v_select2</span><span class="p">)]</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">return</span> <span class="n">c_para</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Yuanzhe Liu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,262 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced examples &mdash; PaSTA 0.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/customWidth.css?v=c9aa5cfe" />
+      <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=7026087e"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/code-tabs.js?v=c983d12e"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API documentation (Python)" href="../api/docwrap.html" />
+    <link rel="prev" title="Getting Started" href="start.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PaSTA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="start.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Advanced examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#controlling-for-parcels-in-pasta-ns">Controlling for parcels in PaSTA-NS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-with-distance-matrix-python-only">Run with distance matrix (python only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#large-scale-pairwise-evaluation">Large-scale pairwise evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-covariance-estimation">Step 1: covariance estimation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-infer-significance">Step 2: infer significance</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#impact-of-spatial-trends">Impact of spatial trends</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/docwrap.html">API documentation (Python)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">Referecnes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PaSTA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Advanced examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/pages/example.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="advanced-examples">
+<h1>Advanced examples<a class="headerlink" href="#advanced-examples" title="Link to this heading"></a></h1>
+<p>This page demonstrates advanced examples of using PaSTA.</p>
+<section id="controlling-for-parcels-in-pasta-ns">
+<h2>Controlling for parcels in PaSTA-NS<a class="headerlink" href="#controlling-for-parcels-in-pasta-ns" title="Link to this heading"></a></h2>
+<p>Several arguments in <strong>pasta.effective_sample_size_estimation()</strong> and <strong>pasta.covariance_estimation()</strong> can be used to control the behavior of parcellations used in PaSTA-NS, including:
+<em>x_parc</em> (<em>y_parc</em>), <em>max_clusters</em>, <em>min_clusters</em>, and <em>min_cluster_size</em>.</p>
+<p><em>x_parc</em> (and <em>y_parc</em>) determines whether PaSTA or PaSTA-NS is used, and also how data <em>x</em> (and <em>y</em>) are pacellated in PaSTA-NS. They can be one of the following 3 scenarios:</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(None\)</span>: PaSTA will be used.</p></li>
+<li><p>String <span class="math notranslate nohighlight">\('auto'\)</span>: PaSTA-NS will be used, with parcellation in map is determined by data-driven spatial clustering, conditioned on parameters including: <em>max_clusters</em>, <em>min_clusters</em>, and <em>min_cluster_size</em></p></li>
+<li><p>int ndarray <span class="math notranslate nohighlight">\((N,)\)</span> with <span class="math notranslate nohighlight">\(k\)</span> unique integers ranging from <span class="math notranslate nohighlight">\(0\)</span> to <span class="math notranslate nohighlight">\(k-1\)</span>, each indicate a parcellation: PaSTA-NS will be used, and parcellation is determined as use-specified. A warning will be raised if the number of user-specified parcellation is larger than the number of data-driven determined number conditioned on parameters including: <em>max_clusters</em>, <em>min_clusters</em>, and <em>min_cluster_size</em>.</p></li>
+</ol>
+<p><em>max_clusters (default 10)</em> and <em>min_cluster_size (default 500)</em> jointly determines the largest number of parcels can be used in data-driven parcellation with spatial clustering. The maximum number is the smaller of <em>max_clusters</em> or <span class="math notranslate nohighlight">\(floor(N / {min\_cluster\_size})\)</span>. The <em>min_cluster_size</em> is included such that the average size (i.e., number of observations) of parcels is not too small to get accurate and reliable variogram estimation.</p>
+<p><em>min_clusters (default 1)</em> determines the smallest number of parcels can be used, which should be always set to 1 in practice. This argument is used in our study to investigate the impact of forced parcellation.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Use <em>x_parc</em> and <em>y_parc</em> to manually set the choice of parcellations in PaSTA-NS</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>May need to change the input of <em>max_clusters</em> and <em>min_cluster_size</em> when apply PaSTA-NS with data-driven spatial clustering for small data patches, depending on your data.</p>
+</div>
+</section>
+<section id="run-with-distance-matrix-python-only">
+<h2>Run with distance matrix (python only)<a class="headerlink" href="#run-with-distance-matrix-python-only" title="Link to this heading"></a></h2>
+<p>PaSTA can be run when the spatial coordinates of observations are missing but the pairwise distances <span class="math notranslate nohighlight">\(D\)</span> is known.</p>
+<p>PaSTA-NS with data-driven spatial clustering can be run when the spatial coordinates of observations are missing but the pairwise distances <span class="math notranslate nohighlight">\(D\)</span> and the spatial dimension <span class="math notranslate nohighlight">\(dim\)</span> is known, where clusters are determined using K-Medoids clustering implemented with Scikit-learn-extra.</p>
+<p>Examples below:</p>
+<div class="tab codetab" data-id="4">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pasta</span>
+<span class="c1"># PaSTA</span>
+<span class="n">pef</span><span class="p">,</span> <span class="n">rX</span><span class="p">,</span> <span class="n">nef</span><span class="p">,</span> <span class="n">run_status</span><span class="p">,</span> <span class="n">n_parc</span><span class="p">,</span> <span class="n">p_naive</span><span class="p">,</span> <span class="n">fc_para1</span><span class="p">,</span> <span class="n">fc_para2</span> <span class="o">=</span> <span class="n">pasta</span><span class="o">.</span><span class="n">effective_sample_size_estimation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">)</span>
+<span class="c1"># PaSTA-NS</span>
+<span class="n">pef</span><span class="p">,</span> <span class="n">rX</span><span class="p">,</span> <span class="n">nef</span><span class="p">,</span> <span class="n">run_status</span><span class="p">,</span> <span class="n">n_parc</span><span class="p">,</span> <span class="n">p_naive</span><span class="p">,</span> <span class="n">fc_para1</span><span class="p">,</span> <span class="n">fc_para2</span> <span class="o">=</span> <span class="n">pasta</span><span class="o">.</span><span class="n">effective_sample_size_estimation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">,</span> <span class="n">xparc</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">yparc</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></section>
+<section id="large-scale-pairwise-evaluation">
+<h2>Large-scale pairwise evaluation<a class="headerlink" href="#large-scale-pairwise-evaluation" title="Link to this heading"></a></h2>
+<p>The <strong>pasta.effective_sample_size_estimation()</strong> funciton internally estiamtes the covariance matrices of spatial maps, which can increase computational cost when evaluating pairwise associations between a large number of spatial maps because of repeatitive covariance estimation.
+<strong>pasta.covariance_estimation()</strong> can be used in this case to improve computational efficiency, by decoupling covariance estimation and significance inference. In brief, the covariance matrices estimated can be saved and reloaded for later inference of statistical significance.</p>
+<p>Below is an example of running this decoupled pipeline of PaSTA, to infer significance of associations between 3 different spatial maps.</p>
+<section id="step-1-covariance-estimation">
+<h3>Step 1: covariance estimation<a class="headerlink" href="#step-1-covariance-estimation" title="Link to this heading"></a></h3>
+<div class="tabs docutils container" data-tabgroup="lang">
+<ul class="tabbar">
+<li class="tabbutton selected" data-id="0" onclick="sphinx_code_tabs_onclick(this)">
+MATLAB</li><li class="tabbutton" data-id="1" onclick="sphinx_code_tabs_onclick(this)">
+python</li></ul><div class="tab codetab selected" data-id="0">
+<div class="highlight-MATLAB notranslate"><div class="highlight"><pre><span></span><span class="n">spatial_maps</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">};</span>
+<span class="n">mapnames</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;z&#39;</span><span class="p">};</span>
+<span class="n">cov_path</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;.&#39;</span><span class="w"> </span><span class="c">% save covariance matrices in the current path</span>
+<span class="k">for</span><span class="w"> </span><span class="nb">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="nb">length</span><span class="p">(</span><span class="n">spatial_maps</span><span class="p">)</span>
+<span class="w">    </span><span class="n">mapi</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">spatial_maps</span><span class="p">{</span><span class="nb">i</span><span class="p">};</span>
+<span class="w">    </span><span class="c">% computed covariance matrix may contain NaN if the spatial data contains NaN or Inf</span>
+<span class="w">    </span><span class="n">covmat</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">covariance_estimation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">coord</span><span class="p">)</span><span class="w"> </span><span class="c">% change function parameters for PaSTA-NS and other settings</span>
+<span class="w">    </span><span class="nb">save</span><span class="p">(</span><span class="nb">fullfile</span><span class="p">(</span><span class="n">cov_path</span><span class="p">,</span><span class="w"> </span><span class="nb">sprintf</span><span class="p">(</span><span class="s">&#39;%s_cov.mat&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">mapnames</span><span class="p">{</span><span class="nb">i</span><span class="p">})),</span><span class="w"> </span><span class="s">&#39;covmat&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div class="tab codetab" data-id="1">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pasta</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">spatial_maps</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">]</span>
+<span class="n">mapnames</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">]</span>
+<span class="n">cov_path</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span> <span class="c1"># save covariance matrix in the current dir</span>
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">mapi</span><span class="p">,</span> <span class="n">namei</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">spatial_maps</span><span class="p">,</span> <span class="n">mapnames</span><span class="p">)):</span>
+    <span class="n">covmat</span> <span class="o">=</span> <span class="n">pasta</span><span class="o">.</span><span class="n">covariance_estimation</span><span class="p">(</span><span class="n">mapi</span><span class="p">,</span> <span class="n">coord</span><span class="p">)</span> <span class="c1"># change function parameters for PaSTA-NS and other settings</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cov_path</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">namei</span><span class="si">}</span><span class="s1">_cov.npy&#39;</span><span class="p">),</span> <span class="n">covmat</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></div></section>
+<section id="step-2-infer-significance">
+<h3>Step 2: infer significance<a class="headerlink" href="#step-2-infer-significance" title="Link to this heading"></a></h3>
+<div class="tabs docutils container" data-tabgroup="lang">
+<ul class="tabbar">
+<li class="tabbutton selected" data-id="0" onclick="sphinx_code_tabs_onclick(this)">
+MATLAB</li><li class="tabbutton" data-id="1" onclick="sphinx_code_tabs_onclick(this)">
+python</li></ul><div class="tab codetab selected" data-id="0">
+<div class="highlight-MATLAB notranslate"><div class="highlight"><pre><span></span><span class="n">spatial_maps</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">};</span>
+<span class="n">mapnames</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;z&#39;</span><span class="p">};</span>
+<span class="n">cov_path</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;.&#39;</span>
+<span class="n">ps</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">zeros</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">spatial_maps</span><span class="p">))</span><span class="w"> </span><span class="c">% initiate for saving</span>
+<span class="n">rXs</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">zeros</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">spatial_maps</span><span class="p">))</span><span class="w"> </span><span class="c">% initiate for saving</span>
+<span class="k">for</span><span class="w"> </span><span class="nb">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="nb">length</span><span class="p">(</span><span class="n">spatial_maps</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+<span class="w">    </span><span class="n">fpr</span><span class="w"> </span><span class="nb">j</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="nb">length</span><span class="p">(</span><span class="n">spatial_maps</span><span class="p">)</span>
+<span class="w">        </span><span class="n">mapi</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">spatial_maps</span><span class="p">{</span><span class="nb">i</span><span class="p">};</span>
+<span class="w">        </span><span class="n">mapj</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">spatial_maps</span><span class="p">{</span><span class="nb">j</span><span class="p">};</span>
+<span class="w">        </span><span class="n">covi</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">load</span><span class="p">(</span><span class="nb">fullfile</span><span class="p">(</span><span class="n">cov_path</span><span class="p">,</span><span class="w"> </span><span class="nb">sprintf</span><span class="p">(</span><span class="s">&#39;%s_cov.mat&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">mapnames</span><span class="p">{</span><span class="nb">i</span><span class="p">})));</span>
+<span class="w">        </span><span class="n">covj</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">load</span><span class="p">(</span><span class="nb">fullfile</span><span class="p">(</span><span class="n">cov_path</span><span class="p">,</span><span class="w"> </span><span class="nb">sprintf</span><span class="p">(</span><span class="s">&#39;%s_cov.mat&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">mapnames</span><span class="p">{</span><span class="nb">j</span><span class="p">})));</span>
+<span class="w">        </span><span class="c">% because data mapi and mapj, and covariance matrices covi and covj may contain NaN and Inf, remove these data points</span>
+<span class="w">        </span><span class="n">valid</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">isfinite</span><span class="p">(</span><span class="n">mapi</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="nb">isfinite</span><span class="p">(</span><span class="n">mapj</span><span class="p">);</span>
+<span class="w">        </span><span class="n">covi</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">covi</span><span class="p">(</span><span class="n">valid</span><span class="p">,</span><span class="w"> </span><span class="n">valid</span><span class="p">);</span>
+<span class="w">        </span><span class="n">covj</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">covj</span><span class="p">(</span><span class="n">valid</span><span class="p">,</span><span class="w"> </span><span class="n">valid</span><span class="p">);</span>
+<span class="w">        </span><span class="p">[</span><span class="n">rXs</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="w"> </span><span class="nb">j</span><span class="p">),</span><span class="w"> </span><span class="o">~</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">corr</span><span class="p">(</span><span class="n">mapi</span><span class="p">(</span><span class="n">valid</span><span class="p">),</span><span class="w"> </span><span class="n">mapj</span><span class="p">(</span><span class="n">valid</span><span class="p">));</span>
+<span class="w">        </span><span class="p">[</span><span class="n">nef</span><span class="p">,</span><span class="w"> </span><span class="n">run_status</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">covs2nef</span><span class="p">(</span><span class="n">covi</span><span class="p">,</span><span class="n">covj</span><span class="p">)</span>
+<span class="w">        </span><span class="n">ps</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="nb">j</span><span class="p">)</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">nef2p</span><span class="p">(</span><span class="n">rXs</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="nb">j</span><span class="p">),</span><span class="w"> </span><span class="n">nef</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div class="tab codetab" data-id="1">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pasta</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">pearsonr</span>
+
+<span class="n">spatial_maps</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">]</span>
+<span class="n">mapnames</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">]</span>
+<span class="n">savepath</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>
+<span class="n">n_maps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">spatial_maps</span><span class="p">)</span>
+<span class="n">rXs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_maps</span><span class="p">,</span> <span class="n">n_maps</span><span class="p">))</span> <span class="c1"># initiate for saving</span>
+<span class="n">ps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_maps</span><span class="p">,</span> <span class="n">n_maps</span><span class="p">))</span> <span class="c1"># initiate for saving</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_maps</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_maps</span><span class="p">):</span>
+        <span class="n">mapi</span> <span class="o">=</span> <span class="n">spatial_maps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">namei</span> <span class="o">=</span> <span class="n">mapnames</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">mapj</span> <span class="o">=</span> <span class="n">spatial_maps</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+        <span class="n">namej</span> <span class="o">=</span> <span class="n">spatial_maps</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+        <span class="n">covi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cov_path</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">namei</span><span class="si">}</span><span class="s1">_cov.npy&#39;</span><span class="p">))</span>
+        <span class="n">covj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cov_path</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">namej</span><span class="si">}</span><span class="s1">_cov.npy&#39;</span><span class="p">))</span>
+        <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">mapi</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">mapj</span><span class="p">))</span>
+        <span class="n">rX</span><span class="p">,</span> <span class="n">p_naive</span> <span class="o">=</span> <span class="n">pearsonr</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">valid</span><span class="p">])</span>
+        <span class="n">nef</span> <span class="o">=</span> <span class="n">pasta</span><span class="o">.</span><span class="n">cov2nef</span><span class="p">(</span><span class="n">covi</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">valid</span><span class="p">,</span><span class="n">valid</span><span class="p">)],</span><span class="n">covj</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">valid</span><span class="p">,</span><span class="n">valid</span><span class="p">)])</span>
+        <span class="n">pef</span> <span class="o">=</span> <span class="n">pasta</span><span class="o">.</span><span class="n">nef2p</span><span class="p">(</span><span class="n">rX</span><span class="p">,</span> <span class="n">nef</span><span class="p">)</span> <span class="k">if</span> <span class="n">nef</span><span class="o">&gt;</span><span class="mi">2</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">rXs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">],</span> <span class="n">ps</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">rX</span><span class="p">,</span> <span class="n">pef</span>
+</pre></div>
+</div>
+</div></div></section>
+</section>
+<section id="impact-of-spatial-trends">
+<h2>Impact of spatial trends<a class="headerlink" href="#impact-of-spatial-trends" title="Link to this heading"></a></h2>
+<p>Coming soon.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="start.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../api/docwrap.html" class="btn btn-neutral float-right" title="API documentation (Python)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Yuanzhe Liu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

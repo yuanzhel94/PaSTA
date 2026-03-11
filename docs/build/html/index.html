@@ -1,0 +1,222 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PaSTA documentation &mdash; PaSTA 0.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/css/customWidth.css?v=c9aa5cfe" />
+      <link rel="stylesheet" type="text/css" href="_static/code-tabs.css?v=1bc26e2f" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7026087e"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+      <script src="_static/code-tabs.js?v=c983d12e"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="pages/install.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            PaSTA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pages/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pages/start.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pages/example.html">Advanced examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/docwrap.html">API documentation (Python)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pages/references.html">Referecnes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">PaSTA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">PaSTA documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pasta-documentation">
+<h1>PaSTA documentation<a class="headerlink" href="#pasta-documentation" title="Link to this heading"></a></h1>
+<p>PaSTA (Parametric Spatial Test for Associations) presents an analytical approach that infers significance of spatial associaiton tests between spatial maps by estimating the effective degrees of freedom of the data.
+While the development and validation focused neuroimaging data, the approach also works in the context of broader spatial data.</p>
+<section id="algorithms">
+<h2>Algorithms<a class="headerlink" href="#algorithms" title="Link to this heading"></a></h2>
+<section id="pasta-assuming-spatial-stationarity-homogeneity">
+<h3>PaSTA (assuming spatial stationarity/homogeneity)<a class="headerlink" href="#pasta-assuming-spatial-stationarity-homogeneity" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Estimate the empirical variogram and fit a stable variogram model for each autocorrelated map <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>.</p></li>
+<li><p>Compute the covariance matrices <span class="math notranslate nohighlight">\(C_{x}\)</span> and <span class="math notranslate nohighlight">\(C_{y}\)</span> based on the variogram.</p></li>
+<li><p>Compute the effective sample size <span class="math notranslate nohighlight">\(N_{\mathrm{ef}}\)</span> and effective degrees of freedom (<span class="math notranslate nohighlight">\(N_{\mathrm{ef}} - 2\)</span>) for association test based on Dutilleul’s derivation (Dutilleul, 1993):</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[N_{\mathrm{ef}} =
+\frac{\operatorname{tr}(B C_x B C_y)}
+     {\operatorname{tr}(B C_x)\operatorname{tr}(B C_y)}
++ 1\]</div>
+<ol class="arabic simple" start="4">
+<li><p>Compute the statistical significance p-value by referencing the test statistic to its theoretical distribution based on the effective degrees of freedom</p></li>
+</ol>
+</section>
+<section id="pasta-ns-can-account-for-nonstationarity">
+<h3>PaSTA-NS (can account for nonstationarity)<a class="headerlink" href="#pasta-ns-can-account-for-nonstationarity" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Estimate the empirical variogram and fit a stable variogram model for each autocorrelated map <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>.</p></li>
+<li><p>Determine number of parcels based on the global strengths of autocorrelation (i.e., based on the <span class="math notranslate nohighlight">\(range\)</span> parameter in the global variogram model).</p></li>
+<li><p>Parcellate data using spatial clustering.</p></li>
+<li><p>Estimate and fit a separate variogram model for each parcel.</p></li>
+<li><p>Compute the nonstationary covariance matrice <span class="math notranslate nohighlight">\(C_{x}\)</span> and <span class="math notranslate nohighlight">\(C_{y}\)</span> from parcels based on process convolution (Paciorek &amp; Schervish, 2006):</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[C^{NS}(i,j)
+=
+|\Sigma_i|^{1/4}
+|\Sigma_j|^{1/4}
+\left|\frac{\Sigma_i+\Sigma_j}{2}\right|^{-1/2}
+\;
+C^{S}\!\left(\sqrt{Q_{ij}}\right)\]</div>
+<div class="math notranslate nohighlight">
+\[Q_{ij}
+=
+(s_i - s_j)^T
+\left(\frac{\Sigma_i+\Sigma_j}{2}\right)^{-1}
+(s_i - s_j)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Sigma_i\)</span> and <span class="math notranslate nohighlight">\(\Sigma_j\)</span> are the covariance matrices of the
+Gaussian kernel centered at spatial locations <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span>,
+respectively. <span class="math notranslate nohighlight">\(C^{S}\)</span> denotes the stationary covariance function.</p>
+<ol class="arabic simple" start="6">
+<li><p>Compute the effective sample size and effective degrees of freedom for association test based on Dutillel’s derivation using nonstationary covariance matrices.</p></li>
+<li><p>Compute the statistical significance p-value by referencing the test statistic to its theoretical distribution based on the effective degrees of freedom</p></li>
+</ol>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pages/install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pages/install.html#matlab">MATLAB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pages/install.html#python">Python</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pages/install.html#pypi-installation">PyPI Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pages/install.html#import-in-python">Import in python</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pages/start.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pages/start.html#pasta">PaSTA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pages/start.html#pasta-ns">PaSTA-NS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pages/example.html">Advanced examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pages/example.html#controlling-for-parcels-in-pasta-ns">Controlling for parcels in PaSTA-NS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pages/example.html#run-with-distance-matrix-python-only">Run with distance matrix (python only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pages/example.html#large-scale-pairwise-evaluation">Large-scale pairwise evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pages/example.html#step-1-covariance-estimation">Step 1: covariance estimation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pages/example.html#step-2-infer-significance">Step 2: infer significance</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pages/example.html#impact-of-spatial-trends">Impact of spatial trends</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/docwrap.html">API documentation (Python)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/pasta.html">pasta module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/pasta.html#pasta.pasta.cov2nef"><code class="docutils literal notranslate"><span class="pre">cov2nef()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/pasta.html#pasta.pasta.covariance_estimation"><code class="docutils literal notranslate"><span class="pre">covariance_estimation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/pasta.html#pasta.pasta.effective_sample_size_estimation"><code class="docutils literal notranslate"><span class="pre">effective_sample_size_estimation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/pasta.html#pasta.pasta.estimate_variogram"><code class="docutils literal notranslate"><span class="pre">estimate_variogram()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/pasta.html#pasta.pasta.fit_covariance_blocks"><code class="docutils literal notranslate"><span class="pre">fit_covariance_blocks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/pasta.html#pasta.pasta.fit_variogram"><code class="docutils literal notranslate"><span class="pre">fit_variogram()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/pasta.html#pasta.pasta.fit_variogram_fixed_exponent"><code class="docutils literal notranslate"><span class="pre">fit_variogram_fixed_exponent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/pasta.html#pasta.pasta.nef2p"><code class="docutils literal notranslate"><span class="pre">nef2p()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/pasta.html#pasta.pasta.parc_data"><code class="docutils literal notranslate"><span class="pre">parc_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/pasta.html#pasta.pasta.process_convolution_crossblocks"><code class="docutils literal notranslate"><span class="pre">process_convolution_crossblocks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/pasta.html#pasta.pasta.stable_covariance_func"><code class="docutils literal notranslate"><span class="pre">stable_covariance_func()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/pasta.html#pasta.pasta.stable_variogram"><code class="docutils literal notranslate"><span class="pre">stable_variogram()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/pasta.html#pasta.pasta.stable_variogram_fixed_exp"><code class="docutils literal notranslate"><span class="pre">stable_variogram_fixed_exp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/pasta.html#pasta.pasta.stable_variogram_fixed_exp_no_nugget"><code class="docutils literal notranslate"><span class="pre">stable_variogram_fixed_exp_no_nugget()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/pasta.html#pasta.pasta.stable_variogram_no_nugget"><code class="docutils literal notranslate"><span class="pre">stable_variogram_no_nugget()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pages/references.html">Referecnes</a></li>
+</ul>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pages/install.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Yuanzhe Liu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,587 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API documentation (Python) &mdash; SPICE 0.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/customWidth.css?v=c9aa5cfe" />
+      <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=7026087e"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/code-tabs.js?v=c983d12e"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Referecnes" href="../pages/references.html" />
+    <link rel="prev" title="API documentation (Python)" href="docwrap.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            SPICE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../pages/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/start.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/example.html">Advanced examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="docwrap.html">API documentation (Python)</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">API documentation (Python)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#esse.esse.cov2nef"><code class="docutils literal notranslate"><span class="pre">cov2nef()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#esse.esse.covariance_estimation"><code class="docutils literal notranslate"><span class="pre">covariance_estimation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#esse.esse.effective_sample_size_estimation"><code class="docutils literal notranslate"><span class="pre">effective_sample_size_estimation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#esse.esse.estimate_variogram"><code class="docutils literal notranslate"><span class="pre">estimate_variogram()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#esse.esse.fit_covariance_blocks"><code class="docutils literal notranslate"><span class="pre">fit_covariance_blocks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#esse.esse.fit_variogram"><code class="docutils literal notranslate"><span class="pre">fit_variogram()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#esse.esse.fit_variogram_fixed_exponent"><code class="docutils literal notranslate"><span class="pre">fit_variogram_fixed_exponent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#esse.esse.nef2p"><code class="docutils literal notranslate"><span class="pre">nef2p()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#esse.esse.parc_data"><code class="docutils literal notranslate"><span class="pre">parc_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#esse.esse.process_convolution_crossblocks"><code class="docutils literal notranslate"><span class="pre">process_convolution_crossblocks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#esse.esse.stable_covariance_func"><code class="docutils literal notranslate"><span class="pre">stable_covariance_func()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#esse.esse.stable_variogram"><code class="docutils literal notranslate"><span class="pre">stable_variogram()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#esse.esse.stable_variogram_fixed_exp"><code class="docutils literal notranslate"><span class="pre">stable_variogram_fixed_exp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#esse.esse.stable_variogram_fixed_exp_no_nugget"><code class="docutils literal notranslate"><span class="pre">stable_variogram_fixed_exp_no_nugget()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#esse.esse.stable_variogram_no_nugget"><code class="docutils literal notranslate"><span class="pre">stable_variogram_no_nugget()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/references.html">Referecnes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SPICE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="docwrap.html">API documentation (Python)</a></li>
+      <li class="breadcrumb-item active">API documentation (Python)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/esse.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="api-documentation-python">
+<h1>API documentation (Python)<a class="headerlink" href="#api-documentation-python" title="Link to this heading"></a></h1>
+<p>This API documentation is for python implementation. The use of MATLAB implementation is similar, but please refer to the comments in MATLAB functions for detailed explanation.</p>
+<dl class="py function" id="module-esse.esse">
+<dt class="sig sig-object py" id="esse.esse.cov2nef">
+<span class="sig-prename descclassname"><span class="pre">esse.esse.</span></span><span class="sig-name descname"><span class="pre">cov2nef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c_para1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_para2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/esse/esse.html#cov2nef"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#esse.esse.cov2nef" title="Link to this definition"></a></dt>
+<dd><p>Compute effective sample size from covariance matrices c_para1 and
+c_para2.</p>
+<p>Is a computational efficient implementation equivalent to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nef</span><span class="o">=</span><span class="n">real</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">trace</span><span class="p">(</span><span class="n">B</span><span class="o">*</span><span class="n">fc_para1</span><span class="o">*</span><span class="n">B</span><span class="o">*</span><span class="n">fc_para2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">trace</span><span class="p">(</span><span class="n">B</span><span class="o">*</span><span class="n">fc_para1</span><span class="p">)</span><span class="o">*</span><span class="n">trace</span><span class="p">(</span><span class="n">B</span><span class="o">*</span><span class="n">fc_para2</span><span class="p">)))</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>c_para1</strong> (<em>ndarray</em>) – Covariance matrix.</p></li>
+<li><p><strong>c_para2</strong> (<em>ndarray</em>) – Covariance matrix.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>nef</strong> – Effective sample size.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="esse.esse.covariance_estimation">
+<span class="sig-prename descclassname"><span class="pre">esse.esse.</span></span><span class="sig-name descname"><span class="pre">covariance_estimation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coord</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xparc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_cluster_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M_cluster</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/esse/esse.html#covariance_estimation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#esse.esse.covariance_estimation" title="Link to this definition"></a></dt>
+<dd><p>Compute the covariance matrix for a single map x using sESSE or nESSE.</p>
+<p>This can be particularly useful when pairwise association between a
+large number of maps needs to be evaluated. Compute the covariance
+matrix for each data separately and save for later use can avoid
+repetitive covariance estimation in the
+effective_sample_size_estimation function.</p>
+<p>Statistical significance between two maps can be inferred by loading
+saved covariance matrices (cov1 and cov2) of two maps (x and y), and
+compute effective sample size and p-values following steps below:</p>
+<p>get submatrix of covariance matrices for points that are valid in both
+maps - valid = np.isfinite(x) &amp; np.isfinite(y),
+cov1 = cov1[np.ix_(valid, valid)],
+cov2 = cov2[np.ix_(valid, valid)],
+x = x[valid], y = y[valid]</p>
+<p>compute nef - cov2nef(cov1, cov2)</p>
+<p>compute test statistics such as Pearson correlation coefficient —
+rX, p_naive = pearsonr(x, y)</p>
+<p>compute significance p-value from test statistics and effective sample
+size: nef2p(rX, nef)</p>
+<blockquote>
+<div><p>Inputs are same as in effective_sample_size_estimation but with y and yparc removed</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>covmat</strong> – Covariance matrix of map x in shape (N, N), where rows and columns
+corresponding to invalid observations in x (e.g., NaN, Inf) are set
+to np.nan and need to be removed before computing nef.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>ndarray (N, N)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="esse.esse.effective_sample_size_estimation">
+<span class="sig-prename descclassname"><span class="pre">esse.esse.</span></span><span class="sig-name descname"><span class="pre">effective_sample_size_estimation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coord</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xparc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yparc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_cluster_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M_cluster</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/esse/esse.html#effective_sample_size_estimation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#esse.esse.effective_sample_size_estimation" title="Link to this definition"></a></dt>
+<dd><p>Main function that runs sESSE and nESSE to compute effective sample size
+and autocorrelation-corrected p-values.</p>
+<p>Leave xparc=None and yparc=None will run sESSE, while setting to ‘auto’
+or user-specified parcellation np int array (N,) will run nESSE.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>ndarray</em><em> (</em><em>N</em><em>,</em><em>)</em>) – Spatial map data to evaluate association. Can contain missing values
+such as NaN and Inf.</p></li>
+<li><p><strong>y</strong> (<em>ndarray</em><em> (</em><em>N</em><em>,</em><em>)</em>) – Spatial map data to evaluate association. Can contain missing values
+such as NaN and Inf.</p></li>
+<li><p><strong>coord</strong> (<em>ndarray</em><em> (</em><em>N</em><em>, </em><em>3</em><em>) or </em><em>None</em>) – Spatial coordinates for observations. When unknown and left as None,
+the function requires D to run sESSE, and D and dim to run nESSE.</p></li>
+<li><p><strong>D</strong> (<em>ndarray</em><em> (</em><em>N</em><em>, </em><em>N</em><em>) or </em><em>None</em>) – Distance matrix. When left as None, computed from coord.</p></li>
+<li><p><strong>dim</strong> (<em>int</em><em> or </em><em>None</em>) – Spatial dimension of data. When left as None, computed as
+coord.shape[1] if needed.</p></li>
+<li><p><strong>M</strong> (<em>int</em><em> or </em><em>None</em>) – Number of lag distances to evaluate when estimating variogram —
+important hyperparameter that determines the quality of variogram
+estimation, large values preferred. When set to None, use
+3*sqrt(N) as default.</p></li>
+<li><p><strong>qd</strong> (<em>float</em><em> (</em><em>0</em><em>, </em><em>1</em><em>]</em>) – Determine the coverage of lag distances evaluated in variogram,
+with maximum distance evaluated being qd*np.max(D) — important
+hyperparameter that determines the quality of variogram estimation,
+large values preferred. Default 0.7.</p></li>
+<li><p><strong>xparc</strong> (<em>None</em><em>, </em><em>'auto'</em><em>, or </em><em>ndarray</em><em> (</em><em>N</em><em>,</em><em>)</em>) – Parcellation setting for map x. If ndarray, index should begin from
+0, i.e., 0 to Np - 1 if Np parcels specified.</p></li>
+<li><p><strong>yparc</strong> (<em>None</em><em>, </em><em>'auto'</em><em>, or </em><em>ndarray</em><em> (</em><em>N</em><em>,</em><em>)</em>) – Parcellation setting for map y. If ndarray, index should begin from
+0, i.e., 0 to Np - 1 if Np parcels specified.</p></li>
+<li><p><strong>max_clusters</strong> (<em>int</em>) – Maximum number of parcellations allowed in nESSE.</p></li>
+<li><p><strong>min_clusters</strong> (<em>int</em>) – Minimum number of parcellations allowed in nESSE.</p></li>
+<li><p><strong>min_cluster_size</strong> (<em>int</em>) – Minimum size of parcellations (# observations per parcel).</p></li>
+<li><p><strong>M_cluster</strong> (<em>int</em><em> or </em><em>None</em>) – Number of lag distances to evaluate in nESSE parcels when estimating
+their variograms. When set to None, default to 3*sqrt(Np), where Np
+is the number of observations in each parcel.</p></li>
+<li><p><strong>nugget</strong> (<em>bool</em>) – Indicator of whether use nugget in variogram models or not.
+Default True because nugget helps with discontinuity at short
+distances, and setting to False can result in problems especially
+when data are nonstationary.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>pef</strong> (<em>float</em>) – Significance p-values based on ESSE.</p></li>
+<li><p><strong>rX</strong> (<em>float</em>) – Pearson correlation coefficient between x and y.</p></li>
+<li><p><strong>nef</strong> (<em>float</em>) – Effective sample size estimated.</p></li>
+<li><p><strong>run_status</strong> (<em>int</em>) – 1 indicates successful run, and 0 indicates unsuccessful run such
+as when nef &lt; 2 and data are too smooth to infer significance.</p></li>
+<li><p><strong>n_parc</strong> (<em>ndarray (2,)</em>) – [xn_parc, yn_parc] that indicates the number of parcels for each
+map in nESSE.</p></li>
+<li><p><strong>p_naive</strong> (<em>float</em>) – Significance with independence assumption and without controlling
+for autocorrelation.</p></li>
+<li><p><strong>fc_para1</strong> (<em>ndarray</em>) – Covariance matrix for map x, with Nvx indicating the number of
+valid (finite value) observations in map x.</p></li>
+<li><p><strong>fc_para2</strong> (<em>ndarray</em>) – Covariance matrix for map y, with Nvy indicating the number of
+valid (finite value) observations in map y.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="esse.esse.estimate_variogram">
+<span class="sig-prename descclassname"><span class="pre">esse.esse.</span></span><span class="sig-name descname"><span class="pre">estimate_variogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/esse/esse.html#estimate_variogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#esse.esse.estimate_variogram" title="Link to this definition"></a></dt>
+<dd><p>Estimate the empirical variogram from distance matrix between vertices,
+and data value at each vertex. Estimation performed in M bins, ranging
+from min_distance to qd * max_distance, where min_distance and
+max_distance are the min and max distance in the distance matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>D</strong> (<em>ndarray</em><em> (</em><em>N</em><em>, </em><em>N</em><em>)</em>) – Distance matrix between all vertices.</p></li>
+<li><p><strong>data</strong> (<em>ndarray</em><em> (</em><em>N</em><em>,</em><em>)</em>) – Data value at each vertex.</p></li>
+<li><p><strong>M</strong> (<em>int</em>) – Number of bins to estimate variogram.</p></li>
+<li><p><strong>qd</strong> (<em>float</em>) – Determine the maximum distance to evaluate variogram.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>v</strong> (<em>ndarray (M,)</em>) – Estimated variogram values, i.e., semivariance.</p></li>
+<li><p><strong>h</strong> (<em>ndarray (M,)</em>) – Lag distances.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This is similar to variogram estimation in BrainSMASH but determining
+the max distance evaluated in a different way.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="esse.esse.fit_covariance_blocks">
+<span class="sig-prename descclassname"><span class="pre">esse.esse.</span></span><span class="sig-name descname"><span class="pre">fit_covariance_blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_clusters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_cluster_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M_cluster</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nugget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exponent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/esse/esse.html#fit_covariance_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#esse.esse.fit_covariance_blocks" title="Link to this definition"></a></dt>
+<dd><p>Fit variogram model for each parcel and compute the diagonal blocks of
+nonstationary covariance matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>ndarray</em><em> (</em><em>N</em><em>,</em><em>)</em>) – Spatial map data to evaluate association. All values are valid.</p></li>
+<li><p><strong>D</strong> (<em>ndarray</em><em> (</em><em>N</em><em>, </em><em>N</em><em>)</em>) – Distance matrix.</p></li>
+<li><p><strong>n_clusters</strong> (<em>int</em>) – Number of parcels.</p></li>
+<li><p><strong>point_cluster_idx</strong> (<em>ndarray</em><em> (</em><em>N</em><em>,</em><em>)</em>) – Int array specifying parcellation settings for map x, ranging from
+0 to NP-1 if NP parcels.</p></li>
+<li><p><strong>M_cluster</strong> (<em>int</em><em> or </em><em>None</em>) – Number of lag distances to evaluate in parcel when estimating their
+variograms. When set to None, default to 3*sqrt(Np), where Np is
+the number of observations in each parcel.</p></li>
+<li><p><strong>qd</strong> (<em>float</em><em> (</em><em>0</em><em>, </em><em>1</em><em>]</em>)</p></li>
+<li><p><strong>nugget</strong> (<em>bool</em>) – Indicator of whether use nugget in variogram models or not.</p></li>
+<li><p><strong>exponent</strong> (<em>float</em>) – Shape parameter estimated using global stationary variogram model.
+This will be kept the same across parcels to obtain valid
+nonstationary covariance expression (i.e., PSD matrix).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>c_para</strong> (<em>ndarray (N, N)</em>) – Covariance matrix for map x, where within parcel covariance are
+estimated but cross-parcel elements are set to 0.</p></li>
+<li><p><strong>b</strong> (<em>ndarray (n_clusters, 4)</em>) – Stable variogram model parameters, each row corresponds a parcel.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="esse.esse.fit_variogram">
+<span class="sig-prename descclassname"><span class="pre">esse.esse.</span></span><span class="sig-name descname"><span class="pre">fit_variogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PrecomputedVariance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nugget</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/esse/esse.html#fit_variogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#esse.esse.fit_variogram" title="Link to this definition"></a></dt>
+<dd><p>Fit a stable variogram model to an empirical variogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h</strong> (<em>(</em><em>M</em><em>,</em><em>) </em><em>ndarray</em>) – Empirical lag distances.</p></li>
+<li><p><strong>v</strong> (<em>(</em><em>M</em><em>,</em><em>) </em><em>ndarray</em>) – Empirical semivariance evaluated at lag distances <code class="docutils literal notranslate"><span class="pre">h</span></code>.</p></li>
+<li><p><strong>D</strong> (<em>(</em><em>N</em><em>, </em><em>N</em><em>) </em><em>ndarray</em>) – Pairwise distance matrix between spatial locations.</p></li>
+<li><p><strong>PrecomputedVariance</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Precomputed sill (total variance) as initial guess for optimization. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the sill is
+estimated as the maximum value of <code class="docutils literal notranslate"><span class="pre">v</span></code>.</p></li>
+<li><p><strong>nugget</strong> (<em>bool</em><em>, </em><em>default=True</em>) – Whether to include a nugget term in the fitted model.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>c_para</strong> (<em>(N, N) ndarray</em>) – Fitted covariance matrix derived from the stable variogram model.</p></li>
+<li><p><strong>b</strong> (<em>(4,) ndarray</em>) – Estimated stable model parameters in the order
+<code class="docutils literal notranslate"><span class="pre">(sill,</span> <span class="pre">range,</span> <span class="pre">exponent,</span> <span class="pre">nugget)</span></code>.</p></li>
+<li><p><strong>f</strong> (<em>callable</em>) – Variogram function. <code class="docutils literal notranslate"><span class="pre">f(h)</span></code> returns the semivariance at lag
+distance <code class="docutils literal notranslate"><span class="pre">h</span></code>.</p></li>
+<li><p><strong>fcov</strong> (<em>callable</em>) – Covariance function. <code class="docutils literal notranslate"><span class="pre">fcov(h)</span></code> returns the covariance at lag
+distance <code class="docutils literal notranslate"><span class="pre">h</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The fitted model follows a stable variogram parameterization. The nugget
+term should be included for better fit.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="esse.esse.fit_variogram_fixed_exponent">
+<span class="sig-prename descclassname"><span class="pre">esse.esse.</span></span><span class="sig-name descname"><span class="pre">fit_variogram_fixed_exponent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exponent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PrecomputedVariance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nugget</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/esse/esse.html#fit_variogram_fixed_exponent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#esse.esse.fit_variogram_fixed_exponent" title="Link to this definition"></a></dt>
+<dd><p>Same as fit_variogram, but for stable model with predetermined
+range parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h</strong> (<em>ndarray</em>)</p></li>
+<li><p><strong>v</strong> (<em>ndarray</em>)</p></li>
+<li><p><strong>D</strong> (<em>ndarray</em>)</p></li>
+<li><p><strong>exponent</strong> (<em>float</em>)</p></li>
+<li><p><strong>PrecomputedVariance</strong> (<em>float</em><em> or </em><em>None</em>)</p></li>
+<li><p><strong>nugget</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>c_para</strong> (<em>ndarray</em>)</p></li>
+<li><p><strong>b</strong> (<em>ndarray</em>)</p></li>
+<li><p><strong>f</strong> (<em>callable</em>)</p></li>
+<li><p><strong>fcov</strong> (<em>callable</em>)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="esse.esse.nef2p">
+<span class="sig-prename descclassname"><span class="pre">esse.esse.</span></span><span class="sig-name descname"><span class="pre">nef2p</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nef</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/esse/esse.html#nef2p"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#esse.esse.nef2p" title="Link to this definition"></a></dt>
+<dd><p>Infer statistical significance p-value from test statistics rX and
+effective sample size nef.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rX</strong> (<em>float</em>) – Test statistic.</p></li>
+<li><p><strong>nef</strong> (<em>float</em>) – Effective sample size.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>p</strong> – Statistical significance p-value.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="esse.esse.parc_data">
+<span class="sig-prename descclassname"><span class="pre">esse.esse.</span></span><span class="sig-name descname"><span class="pre">parc_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_para</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_clusters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_clusters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_cluster_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">map_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/esse/esse.html#parc_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#esse.esse.parc_data" title="Link to this definition"></a></dt>
+<dd><p>parcellate data depending on setting to account for nonstationarity</p>
+<p>3 scenarios:
+1. parc is None: do not parcellate and return covariance matrix c_para as is (new variable name fc_para)
+2. parc is string ‘auto’: determine the number of parcels based on estiamted range and shape parameter from stable variogram model (i.e., b[1] and b[2]), and parcellate data using spatial clustering
+3. parc is user specified np int array with shape (M,) with each int indicating a unique parcel: return parc as is (new variable name parc_out), raise warning if risk of over-parcellation (compared to ‘auto’)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parc</strong> (<em>either None</em><em>, </em><em>'auto'</em><em>, or </em><em>(</em><em>N</em><em>,</em><em>)</em>) – specifying the setting of parcellation</p></li>
+<li><p><strong>c_para</strong> (<em>covariance matrix estimated from stationary ESSE</em><em>, </em><em>i.e.</em><em>, </em><em>without parcel</em>)</p></li>
+<li><p><strong>b</strong> (<em>stable variogram model parameters estimated from stationary ESSE</em>)</p></li>
+<li><p><strong>D</strong> (<em>distance matrix</em><em> of </em><em>data</em><em> (</em><em>N</em><em>, </em><em>N</em><em>)</em>)</p></li>
+<li><p><strong>coord</strong> (<em>(</em><em>N</em><em>, </em><em>3</em><em>) </em><em>spatial coordinates</em><em> of </em><em>data</em><em> or </em><em>None</em>) – If None, spatial clustering is conducted based on the distance matrix D with KMedoids</p></li>
+<li><p><strong>max_clusters</strong> (<em>maximum number</em><em> of </em><em>parcellation</em><em>, </em><em>set to avoid over-parcellation at weak autocorrelation</em><em>, </em><em>e.g.</em><em>, </em><em>spatial independence</em>)</p></li>
+<li><p><strong>min_clusters</strong> (<em>minimum number</em><em> of </em><em>parcellation</em><em>, </em><em>set to 1 will allow nonstatioanry ESSE to collapse to stationary ESSE. This was used to mandate parcellation and test difference between sESSE and nESSE in the manuscript.</em>)</p></li>
+<li><p><strong>min_cluster_size</strong> (<em>set to avoid too small parcellations</em><em>, </em><em>we set to 500 in fsaverage5 mesh with 10k vertices</em>)</p></li>
+<li><p><strong>map_idx</strong> (<em>used to identify the map evaluated when raise warning</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>parc_out</strong> (<em>None when there is no subdivision of parcels, or (N,) of int where each unique int indicate a parcel</em>)</p></li>
+<li><p><strong>n_parc</strong> (<em>number of parcels</em>)</p></li>
+<li><p><strong>unique_parcs</strong> (<em>index of unique parcels</em>)</p></li>
+<li><p><strong>fc_para</strong> (<em>covariance matrix, either as c_para (when no parcellation) or zeros (parcellated)</em>)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="esse.esse.process_convolution_crossblocks">
+<span class="sig-prename descclassname"><span class="pre">esse.esse.</span></span><span class="sig-name descname"><span class="pre">process_convolution_crossblocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c_para</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_clusters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_cluster_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exponent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/esse/esse.html#process_convolution_crossblocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#esse.esse.process_convolution_crossblocks" title="Link to this definition"></a></dt>
+<dd><p>Process convolution to infer the cross-parcel covariance of
+nonstationary covariance matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>c_para</strong> (<em>ndarray</em><em> (</em><em>N</em><em>, </em><em>N</em><em>)</em>) – Covariance matrix output from fit_covariance_blocks, where
+covariances are estimated for within parcel pairs but not
+cross-parcel.</p></li>
+<li><p><strong>b</strong> (<em>ndarray</em><em> (</em><em>n_clusters</em><em>, </em><em>4</em><em>)</em>) – Fitted stable variogram model parameters, each row per parcel.</p></li>
+<li><p><strong>x</strong> (<em>ndarray</em><em> (</em><em>N</em><em>,</em><em>)</em>) – Map data.</p></li>
+<li><p><strong>D</strong> (<em>ndarray</em><em> (</em><em>N</em><em>, </em><em>N</em><em>)</em>) – Distance matrix.</p></li>
+<li><p><strong>n_clusters</strong> (<em>int</em>) – Number of parcels.</p></li>
+<li><p><strong>point_cluster_idx</strong> (<em>ndarray</em><em> (</em><em>N</em><em>,</em><em>)</em>) – Int array starting from 0 indicating the membership of each
+point to parcels.</p></li>
+<li><p><strong>dim</strong> (<em>int</em>) – Spatial dimension of the data.</p></li>
+<li><p><strong>exponent</strong> (<em>float</em>) – Shape parameter fitted using the global stationary variogram,
+kept the same for valid PSD covariance matrix.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>c_para</strong> – Nonstationary covariance matrix by process convolution.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray (N, N)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="esse.esse.stable_covariance_func">
+<span class="sig-prename descclassname"><span class="pre">esse.esse.</span></span><span class="sig-name descname"><span class="pre">stable_covariance_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/esse/esse.html#stable_covariance_func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#esse.esse.stable_covariance_func" title="Link to this definition"></a></dt>
+<dd><p>Covariance function based on stable variogram model for observations with
+distance h.</p>
+<p>Equivalent to:
+(sill + nugget) - (sill * (1 - exp(-(h / range)**shape)) + nugget)
+= sill * exp(-(h / range)**shape) for h &gt; 0.</p>
+<p>When h == 0, set to sill + nugget, which is not computed here.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h</strong> (<em>float</em><em> or </em><em>ndarray</em>) – Lag distance at which to compute covariance.</p></li>
+<li><p><strong>b</strong> (<em>ndarray</em>) – Parameters for stable models.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Covariance at distance h.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float or ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="esse.esse.stable_variogram">
+<span class="sig-prename descclassname"><span class="pre">esse.esse.</span></span><span class="sig-name descname"><span class="pre">stable_variogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/esse/esse.html#stable_variogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#esse.esse.stable_variogram" title="Link to this definition"></a></dt>
+<dd><p>Stable variogram model without nugget, defined as:
+semivariance = sill * (1 - exp(-(h / range)**shape))</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h</strong> (<em>float</em><em> or </em><em>ndarray</em>) – Lag distance to be evaluated.</p></li>
+<li><p><strong>b1</strong> (<em>float</em>) – Sill.</p></li>
+<li><p><strong>b2</strong> (<em>float</em>) – Range parameter.</p></li>
+<li><p><strong>b3</strong> (<em>float</em>) – Shape.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Semivariance at lag distance <code class="docutils literal notranslate"><span class="pre">h</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float or ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="esse.esse.stable_variogram_fixed_exp">
+<span class="sig-prename descclassname"><span class="pre">esse.esse.</span></span><span class="sig-name descname"><span class="pre">stable_variogram_fixed_exp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_exp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/esse/esse.html#stable_variogram_fixed_exp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#esse.esse.stable_variogram_fixed_exp" title="Link to this definition"></a></dt>
+<dd><p>Stable variogram with prespecified shape parameter, with nugget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h</strong> (<em>float</em><em> or </em><em>ndarray</em>)</p></li>
+<li><p><strong>b1</strong> (<em>float</em>)</p></li>
+<li><p><strong>b2</strong> (<em>float</em>)</p></li>
+<li><p><strong>b3</strong> (<em>float</em>)</p></li>
+<li><p><strong>fixed_exp</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float or ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="esse.esse.stable_variogram_fixed_exp_no_nugget">
+<span class="sig-prename descclassname"><span class="pre">esse.esse.</span></span><span class="sig-name descname"><span class="pre">stable_variogram_fixed_exp_no_nugget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_exp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/esse/esse.html#stable_variogram_fixed_exp_no_nugget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#esse.esse.stable_variogram_fixed_exp_no_nugget" title="Link to this definition"></a></dt>
+<dd><p>Stable variogram with prespecified shape parameter, without nugget
+(i.e., nugget set to 0).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h</strong> (<em>float</em><em> or </em><em>ndarray</em>)</p></li>
+<li><p><strong>b1</strong> (<em>float</em>)</p></li>
+<li><p><strong>b2</strong> (<em>float</em>)</p></li>
+<li><p><strong>fixed_exp</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float or ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="esse.esse.stable_variogram_no_nugget">
+<span class="sig-prename descclassname"><span class="pre">esse.esse.</span></span><span class="sig-name descname"><span class="pre">stable_variogram_no_nugget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/esse/esse.html#stable_variogram_no_nugget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#esse.esse.stable_variogram_no_nugget" title="Link to this definition"></a></dt>
+<dd><p>stable variogram model without nugget, defined as: semivariance = sill * (1-exp(-(h/range)**shape))</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h</strong> (<em>float</em><em> or </em><em>ndarray</em>) – lag distance to be evaluated</p></li>
+<li><p><strong>b1</strong> (<em>float</em>) – sill</p></li>
+<li><p><strong>b2</strong> (<em>float</em>) – range parameter</p></li>
+<li><p><strong>b3</strong> (<em>float</em>) – shape</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>senuvaruabce at lag distance h</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float or ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="docwrap.html" class="btn btn-neutral float-left" title="API documentation (Python)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../pages/references.html" class="btn btn-neutral float-right" title="Referecnes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Yuanzhe Liu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
