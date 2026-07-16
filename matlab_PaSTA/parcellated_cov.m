@@ -49,7 +49,7 @@ switch crossblock
             parci = unique_parcs(i);
             v_select1 = parc==parci;
             phii=bs(i,2);
-            for j=i:n_parc
+            for j=i+1:n_parc
                 parcj = unique_parcs(j);
                 v_select2 = parc==parcj;
                 D_select = D(v_select1,v_select2);
