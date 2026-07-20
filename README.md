@@ -62,7 +62,7 @@ To evaluate the association between spatial maps *x* and *y* given:
 #### MATLAB
 
 ```matlab
-% take 70–80s to run (Apple Silicon M1 Pro) on fsaverage5 10k cortical map
+% take 15s to run (Apple Silicon M1 Pro) on fsaverage5 10k cortical map
 % pef - significance p-value
 % rX - Pearson correlation coefficient
 % nef - effective sample size
@@ -72,7 +72,7 @@ To evaluate the association between spatial maps *x* and *y* given:
 #### Python
 
 ```python
-# take ~3.5 min to run (Apple Silicon M1 Pro) on fsaverage5 10k cortical map
+# take ~3.5 min to run (Apple Silicon M1 Pro) on fsaverage5 10k cortical map, slower than MATLAB because algorithm optimization remains in development
 # pef - significance p-value
 # rX - Pearson correlation coefficient
 # nef - effective sample size
@@ -87,7 +87,7 @@ pef, rX, nef, run_status, n_parc, p_naive, fc_para1, fc_para2 = pasta.effective_
 
 ```matlab
 % PaSTA-NS with data-driven parcellation
-% take 70–80s to run (Apple Silicon M1 Pro) on fsaverage5 10k cortical map
+% take 20s to run (Apple Silicon M1 Pro) on fsaverage5 10k cortical map
 [pef, rX, nef, run_status, n_parc, p_naive, fc_para1, fc_para2] = effective_sample_size_estimation(x, y, coord, 'xparc', 'auto', 'yparc', 'auto');
 ```
 
