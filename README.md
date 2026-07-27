@@ -7,7 +7,9 @@
 ## Before your start
 We identified a bug for PaSTA-NS in the original code, which makes PaSTA-NS more conservative than expected.
 
-Bug in MATLAB code has been fixed, but not in Python. Use MATLAB version only before further updates.
+Bug in MATLAB code has been fixed, but not in Python. For PaSTA-NS, use MATLAB version only before further updates.
+
+Stationary version of PaSTA in Python code is not affected.
 
 A memory efficient version will coming up soon, which allows running PaSTA on extreme dense maps such as 164k brain mesh and brainwide gray matter voxles. 
 
