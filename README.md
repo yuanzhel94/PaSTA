@@ -132,13 +132,14 @@ pef, rX, nef, run_status, n_parc, p_naive, fc_para1, fc_para2 = pasta.effective_
 % PaSTA-NS with data-driven parcellation
 % take 20s to run (Apple Silicon M1 Pro) on fsaverage5 10k cortical map
 % to control random seed, use 'random_state' argument and set to non-negative int
+% use ['dim', 2] if geodesic distance, becaues geodesic distance is measured on 2D cortical sheet.
 % pasta_fit fields:
 %   pef - significance p-value
 %   rX - Pearson correlation coefficient
 %   nef - effective sample size
 %   n_parc - number of data-driven parcellations for each map
 pasta_fit = pasta(x, y, coord, 'xparc', 'auto', 'yparc', 'auto'); %Euclidean distance
-pasta_fit = pasta(x, y, coord, 'D', D, 'xparc', 'auto', 'yparc', 'auto'); %input distance D in shape (N,N)
+pasta_fit = pasta(x, y, coord, 'D', D, 'xparc', 'auto', 'yparc', 'auto'); %input distance D in shape (N,N), if geodesic distance, include argument ['dim', 2]
 pasta_fit = pasta(x, y, coord, 'D', D_triu, 'xparc', 'auto', 'yparc', 'auto'); %input distance D_triu = single(D(triu(true(N), 1)));
 ```
 

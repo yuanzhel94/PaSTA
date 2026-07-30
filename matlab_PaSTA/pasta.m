@@ -2,6 +2,61 @@ function pasta_fit = pasta(x, y, coord, varargin)
 %pasta_fit = pasta(x, y, coord, varargin)
 %This function run PaSTA in memory efficient way by evaluating distance
 %and covariance matrices in blockwise manner
+% Inputs:
+%   x: frist spatial data vector of length N, can contain NaN and Inf
+%   y: second spatial data vector of length N, can contain NaN and Inf
+%   coord: spatial coordinates of the data in x and y of shape (N, dim)
+% Optional Inputs:
+%   M: number of lag distances to evaluate when estimating the global
+%       variogram, default to 3*sqrt(N) if not provided
+%   M_scale: scaling constant for M, default to 3, such as M = 3*sqrt(N)
+%   qd: factor determines the largest distance to evaluate in variogram,
+%       float number (0,1]. Default to 0.7. Largest distance evaluated is
+%       computed as qd*max(D(:)), i.e., the product of qd and the maximum
+%       distance between data points.
+%   nugget: bool indicator of whether use nugget in variogram models.
+%       Should always keep to true (default) for better variogram fitting.
+%   kernel_scale: determine the Gaussian kernel window when estimate the
+%       empirical variogram. Default to 4, i.e., for distance bin centerred
+%       at h, only evaluate distance within 4 std of the Gaussian kernel
+%       bandwidth.
+%   block_size: block size used for memory optimization in PaSTA, Default
+%       to 2,000. Larger values increase memory required.
+%   n_workers: number of workers to run the algorithm, use n_workers > 1
+%       for parallelization.
+%   xparc: either [], 'auto', or int vector of length N where each value represents a parcellation.
+%       Determines the way to parcellate data x and compute nonstationary covariance. Default to []
+%       that assumes stationary autocorrelation and does not parcellate (i.e.,
+%       PaSTA). if 'auto', run PaSTA-NS by determining the parcel using a
+%       data-driven spatial clustering. if vector of length N, parcellate data
+%       using user-specified parcellation to estimate nonstationarity.
+%   yparc: same as xparc but determines the way to parcellate data y
+%   max_clusters: the maximum number of parcels allowed if data-driven
+%       parcellation. Default to 10. Only work when xparc or yparc == 'auto'. 
+%   min_clusters: the minimum number of parcels allowed if data-driven
+%       parcellation. Default to 1. This is used in our paper to investigate
+%       the impact of mandatory parcellation when data-driven approach
+%       suggest autocorrelation is too strong to allow data parcellation. In
+%       practice, always keep to 1 that is the default. Only work when xparc or yparc == 'auto'.
+%   min_cluster_size: the average number of samples in each parcel if
+%       data-driven parcellation, default to 500. Only work when xparc or yparc == 'auto'.
+%   D: distance matrix shape (N,N) or distance upper triangular vector
+%       shape (N*(N-1)/2, 1) used for variogram. Used to specify
+%       non-Euclidean distance. 
+%   distance_file: file containing distance matrix variable of shape (N,N).
+%       When provided with 'distance_variable', distance matrix will be loaded
+%       in a blockwise manner during algorithm running. Can save memory but
+%       much slower when used.
+%   distance_variable: variable name for distance matrix sotred in distance_file.
+%       When provided with 'distance_file', distance matrix will be loaded
+%       in a blockwise manner during algorithm running. Can save memory but
+%       much slower when used.
+%   dim: dimension used for PaSTA-NS. SHould be 3 for 3D Euclidean distance
+%       and 2 for geodesic distance because geodesic distance is measured on
+%       the flattened cortical sheet. Default to the dimension of the 'coord'
+%       input when not provided.
+%   random_state: int that controls for random seed, for reproducibility
+%       of data-driven parcellation in PaSTA-NS.
 
 positive_int = @(x) isnumeric(x) && isscalar(x) && isreal(x) && isfinite(x) && x >= 1 && fix(x) == x;
 p = inputParser;
