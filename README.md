@@ -10,6 +10,8 @@ Runtime and memory of the algorithm have been optimized for the MATLAB version, 
 
 In addition, a bug in Python version of PaSTA-NS remain unfixed. Avoid using Python version of PaSTA-NS before further updates.
 
+We are now improving and fixing the Python version and will update soon.
+ 
 ---
 
 ## Memory and runtime benchmark
@@ -26,7 +28,7 @@ Although memory can be a major concern when evaluating dense spatial maps, PaSTA
 
 Table below displays memory needed to run PaSTA and PaSTA-NS when compute Euclidean distance on-the-fly, using an input upper triangular distance vector in single precision, and using an input full N-by-N distance matrix in double precision. The latter two represents the minimum and maximum memory requirement when a non-Euclidean distance metric is used. PaSTA and PaSTA-NS used the default block size of 2,000 and are compared to spin test.
 
-**Memory needed compared to spin test (1,000 surrogates)**
+**Memory (GB) needed compared to spin test (1,000 surrogates)**
 
 ![Memory comparison](figs/memory.svg)
 
@@ -42,7 +44,7 @@ PaSTA-NS evaluates **fsaverage10k brain mesh in 50 seconds**, **fsLR32k in 7 min
 Table below displays runtime of PaSTA and PaSTA-NS (using the default 2,000 block size), compared to spin test with 1,000 surrogates. 
 Gain in computational time is evident for sparse and moderately dense maps (fsLR4k to civet41k). The runtime of PaSTA / PaSTA-NS becomes comparable to spin test (1,000 surrogates) at fsaverage164k, but an improvement is expected when more surrogates are needed in permutation methods (e.g. 5,000 and more).
 
-**Time needed compared to spin test (1,000 surrogates)**
+**Time (seconds) needed compared to spin test (1,000 surrogates)**
 
 ![Time comparison](figs/runtime.svg)
 * Spin test implementation from [Spin test GitHub](https://github.com/spin-test/spin-test)
