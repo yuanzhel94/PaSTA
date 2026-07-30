@@ -40,7 +40,7 @@ Using a **single core Intel(R) Xeon(R) Gold 6448H CPU**, PaSTA evaluates **fsave
 PaSTA-NS evaluates **fsaverage10k brain mesh in 50 seconds**, **fsLR32k in 7 minutess**, **fsaverage164k in 3 hours**, and **MNI152-2mm GM voxels in 3.5 hours**.
 
 Table below displays runtime of PaSTA and PaSTA-NS (using the default 2,000 block size), compared to spin test with 1,000 surrogates. 
-Gain in computational time is evident for sparse and moderately dense maps (fsLR4k to civet41k). The runtime of PaSTA / PaSTA-NS becomes comparable to spin test (1,000 surrogates) at fsaverage164k, and an improvement is expected when more surrogates are needed in permutation methods (e.g. 5,000 and more).
+Gain in computational time is evident for sparse and moderately dense maps (fsLR4k to civet41k). The runtime of PaSTA / PaSTA-NS becomes comparable to spin test (1,000 surrogates) at fsaverage164k, but an improvement is expected when more surrogates are needed in permutation methods (e.g. 5,000 and more).
 
 **Time needed compared to spin test (1,000 surrogates)**
 
