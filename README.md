@@ -6,7 +6,7 @@
 
 ## Before your start
 
-Runtime and memory of the algorithm have been optimized for the MATLAB version, but not the Python version. This means the Python version can be much slower and requires large memory, particularly on dense maps. 
+Computational time and memory of the algorithm have been optimized for the MATLAB version, but not the Python version. This means the Python version can be much slower and requires large memory, particularly on dense maps. 
 
 In addition, a bug in Python version of PaSTA-NS remain unfixed. Avoid using Python version of PaSTA-NS before further updates.
 
@@ -14,7 +14,7 @@ We are now improving and fixing the Python version and will update soon.
  
 ---
 
-## Memory and runtime benchmark
+## Memory and computational time benchmark
 
 PaSTA estimates the covariance structure of data and has an $O(N^2)$ computational complexity in time and memory, where $N$ is the number of data points. 
 
@@ -41,15 +41,15 @@ Using a **single core Intel(R) Xeon(R) Gold 6448H CPU**, PaSTA evaluates **fsave
 
 PaSTA-NS evaluates **fsaverage10k brain mesh in 50 seconds**, **fsLR32k in 7 minutess**, **fsaverage164k in 3 hours**, and **MNI152-2mm GM voxels in 3.5 hours**.
 
-Table below displays runtime of PaSTA and PaSTA-NS (using the default 2,000 block size), compared to spin test with 1,000 surrogates. 
-Gain in computational time is evident for sparse and moderately dense maps (fsLR4k to civet41k). The runtime of PaSTA / PaSTA-NS becomes comparable to spin test (1,000 surrogates) at fsaverage164k, but an improvement is expected when more surrogates are needed in permutation methods (e.g. 5,000 and more).
+Table below displays computational time of PaSTA and PaSTA-NS (using the default 2,000 block size), compared to spin test with 1,000 surrogates. 
+Gain in computational time is evident for sparse and moderately dense maps (fsLR4k to civet41k). The computational time of PaSTA / PaSTA-NS becomes comparable to spin test (1,000 surrogates) at fsaverage164k, but an improvement is expected when more surrogates are needed in permutation methods (e.g. 5,000 and more).
 
 **Time (seconds) needed compared to spin test (1,000 surrogates)**
 
 ![Time comparison](figs/runtime.svg)
 * Spin test implementation from [Spin test GitHub](https://github.com/spin-test/spin-test)
-* Runtime evaluated using a single core Intel(R) Xeon(R) Gold 6448H with MATLAB 2023a
-* Runtime estimated by averaging 10 repetitive runs
+* Computational time evaluated using a single core Intel(R) Xeon(R) Gold 6448H with MATLAB 2023a
+* Computational time estimated by averaging 10 repetitive runs
 
 ---
 
