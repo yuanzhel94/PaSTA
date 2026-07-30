@@ -31,7 +31,7 @@ Table below displays memory needed to run PaSTA and PaSTA-NS when compute Euclid
 **Memory (GB) needed compared to spin test (1,000 surrogates)**
 
 ![Memory comparison](figs/memory.svg)
-
+* Memory estimated by averaging 10 repetitive runs
 
 **Time**
 
@@ -49,6 +49,7 @@ Gain in computational time is evident for sparse and moderately dense maps (fsLR
 ![Time comparison](figs/runtime.svg)
 * Spin test implementation from [Spin test GitHub](https://github.com/spin-test/spin-test)
 * Runtime evaluated using a single core Intel(R) Xeon(R) Gold 6448H with MATLAB 2023a
+* Runtime estimated by averaging 10 repetitive runs
 
 ---
 
