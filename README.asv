@@ -46,7 +46,8 @@ Gain in computational time is evident for sparse and moderately dense maps (fsLR
 
 ![Time comparison](figs/runtime.svg)
 * Spin test implementation from [Spin test GitHub](https://github.com/spin-test/spin-test)
-* Runtime evaluated using a single core Intel(R) Xeon(R) Gold 6448H with MATLAB 2023a
+* Runtime evaluated using a single core Intel(R) Xeon(R) Gold 6448H
+* Runtime of evaluated using a single core Intel(R) Xeon(R) Gold 6448H
 
 ---
 
@@ -104,9 +105,7 @@ To evaluate the association between spatial maps *x* and *y* given:
 %   pef - significance p-value
 %   rX - Pearson correlation coefficient
 %   nef - effective sample size
-pasta_fit = pasta(x, y, coord); %Euclidean distance
-pasta_fit = pasta(x, y, coord, 'D', D); %input distance D in shape (N,N)
-pasta_fit = pasta(x, y, coord, 'D', D_triu); %input distance D_triu = single(D(triu(true(N), 1)));
+pasta_fit = pasta(x, y, coord);
 ```
 
 #### Python
@@ -128,15 +127,12 @@ pef, rX, nef, run_status, n_parc, p_naive, fc_para1, fc_para2 = pasta.effective_
 ```matlab
 % PaSTA-NS with data-driven parcellation
 % take 20s to run (Apple Silicon M1 Pro) on fsaverage5 10k cortical map
-% to control random seed, use 'random_state' argument and set to non-negative int
 % pasta_fit fields:
 %   pef - significance p-value
 %   rX - Pearson correlation coefficient
 %   nef - effective sample size
 %   n_parc - number of data-driven parcellations for each map
-pasta_fit = pasta(x, y, coord, 'xparc', 'auto', 'yparc', 'auto'); %Euclidean distance
-pasta_fit = pasta(x, y, coord, 'D', D, 'xparc', 'auto', 'yparc', 'auto'); %input distance D in shape (N,N)
-pasta_fit = pasta(x, y, coord, 'D', D_triu, 'xparc', 'auto', 'yparc', 'auto'); %input distance D_triu = single(D(triu(true(N), 1)));
+pasta_fit = pasta(x, y, coord, 'xparc', 'auto', 'yparc', 'auto');
 ```
 
 #### Python
