@@ -1,0 +1,9 @@
+README.md
+setup.py
+brain_pasta.egg-info/PKG-INFO
+brain_pasta.egg-info/SOURCES.txt
+brain_pasta.egg-info/dependency_links.txt
+brain_pasta.egg-info/requires.txt
+brain_pasta.egg-info/top_level.txt
+pasta/__init__.py
+pasta/pasta.py

@@ -20,8 +20,8 @@ PaSTA (assuming spatial stationarity/homogeneity)
 .. math::
 
    N_{\mathrm{ef}} =
-   \frac{\operatorname{tr}(B C_x B C_y)}
-        {\operatorname{tr}(B C_x)\operatorname{tr}(B C_y)}
+   \frac{\operatorname{tr}(B C_x)\operatorname{tr}(B C_y)}
+        {\operatorname{tr}(B C_x B C_y)}
    + 1
 
 4. Compute the statistical significance p-value by referencing the test statistic to its theoretical distribution based on the effective degrees of freedom

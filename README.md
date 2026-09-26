@@ -4,55 +4,6 @@
 
 ---
 
-## Before your start
-
-Computational time and memory of the algorithm have been optimized for the MATLAB version, but not the Python version. This means the Python version can be much slower and requires large memory, particularly on dense maps. 
-
-In addition, a bug in Python version of PaSTA-NS remain unfixed. Avoid using Python version of PaSTA-NS before further updates.
-
-We are now improving and fixing the Python version and will update soon.
- 
----
-
-## Memory and computational time benchmark
-
-PaSTA estimates the covariance structure of data and has an $O(N^2)$ computational complexity in time and memory, where $N$ is the number of data points. 
-
-**Memory**
-
-Although memory can be a major concern when evaluating dense spatial maps, PaSTA optimized the memory use by processing square matrices in a blockwise manner (default block size 2,000) and avoided forming the memory-hard N-by-N matrices. 
-
-- By default, PaSTA computes Euclidean distance between data on-the-fly from their spatial coordinates to minimize memory burden, enabling autocorrelation correction on dense maps (e.g., fsaverage164k and MNI152 2mm GM voxels) with less than $2GB$ memory when the default block size of 2,000 is used. 
-
-- When a non-Euclidean (e.g., geodesic) distance metric is provided by the user, PaSTA will need more memory to store the distance input. The memory needed in practice depends on the format and precision of distance inputs, and the number of observations $N$. A typical modern personal laptop should be sufficient to evaluate moderately dense maps (e.g., civet41k and fsLR32k) with less than $6GB$ memory when using the default block size 2,000. Denser maps such as fsaverage164k may require workstation or cluster computing with more than $50GB$ memory.
-
-Table below displays memory needed to run PaSTA and PaSTA-NS when compute Euclidean distance on-the-fly, using an input upper triangular distance vector in single precision, and using an input full N-by-N distance matrix in double precision. The latter two represents the minimum and maximum memory requirement when a non-Euclidean distance metric is used. PaSTA and PaSTA-NS used the default block size of 2,000 and are compared to spin test.
-
-**Memory (GB) needed compared to spin test (1,000 surrogates)**
-
-![Memory comparison](figs/memory.svg)
-* Memory estimated by averaging 10 repetitive runs
-
-**Time**
-
-Despite the time complexity, PaSTA is typically faster than existing permutation methods that generate thousands of surrogates. 
-
-Using a **single core Intel(R) Xeon(R) Gold 6448H CPU**, PaSTA evaluates **fsaverage10k brain mesh in 30 seconds**, **fsLR32k in 5 minutes**, **fsaverage164k in 2 hours**, and **MNI152-2mm GM voxels in 3 hrs**.
-
-PaSTA-NS evaluates **fsaverage10k brain mesh in 50 seconds**, **fsLR32k in 7 minutess**, **fsaverage164k in 3 hours**, and **MNI152-2mm GM voxels in 3.5 hours**.
-
-Table below displays computational time of PaSTA and PaSTA-NS (using the default 2,000 block size), compared to spin test with 1,000 surrogates. 
-Gain in computational time is evident for sparse and moderately dense maps (fsLR4k to civet41k). The computational time of PaSTA / PaSTA-NS becomes comparable to spin test (1,000 surrogates) at fsaverage164k, but an improvement is expected when more surrogates are needed in permutation methods (e.g. 5,000 and more).
-
-**Time (seconds) needed compared to spin test (1,000 surrogates)**
-
-![Time comparison](figs/runtime.svg)
-* Spin test implementation from [Spin test GitHub](https://github.com/spin-test/spin-test)
-* Computational time evaluated using a single core Intel(R) Xeon(R) Gold 6448H with MATLAB 2023a
-* Computational time estimated by averaging 10 repetitive runs
-
----
-
 ## Installation
 
 We provide both MATLAB and Python implementations of PaSTA.
@@ -115,13 +66,16 @@ pasta_fit = pasta(x, y, coord, 'D', D_triu); %input distance D_triu = single(D(t
 #### Python
 
 ```python
-# take ~3.5 min to run (Apple Silicon M1 Pro) on fsaverage5 10k cortical map, slower than MATLAB because algorithm optimization remains in development
+# take 13s to run (Apple Silicon M1 Pro) on fsaverage5 10k cortical map
 # pef - significance p-value
 # rX - Pearson correlation coefficient
 # nef - effective sample size
 
 import pasta
-pef, rX, nef, run_status, n_parc, p_naive, fc_para1, fc_para2 = pasta.effective_sample_size_estimation(x, y, coord)
+fit = pasta.pasta(x, y, coord) # Euclidean distance
+fit = pasta.pasta(x, y, coord, D=D) # input distance D in shape (N,N)
+fit = pasta.pasta(x, y, coord, D=D_triu) # input distance D_triu = D[np.triu_indices_from(D, k=1)]
+pef, rX, nef = fit.pef, fit.rX, fit.nef
 ```
 
 ### PaSTA-NS (nonstationary assumption)
@@ -147,11 +101,60 @@ pasta_fit = pasta(x, y, coord, 'D', D_triu, 'xparc', 'auto', 'yparc', 'auto'); %
 
 ```python
 # PaSTA-NS with data-driven parcellation
-# take ~3.5 min to run (Apple Silicon M1 Pro) on fsaverage5 10k cortical map
+# take 20s to run (Apple Silicon M1 Pro) on fsaverage5 10k cortical map
+# to control random seed, use 'random_state' argument (e.g., random_state=123)
+# use dim=2 if geodesic distance, becaues geodesic distance is measured on 2D cortical sheet.
 
 import pasta
-pef, rX, nef, run_status, n_parc, p_naive, fc_para1, fc_para2 = pasta.effective_sample_size_estimation(x, y, coord,xparc='auto',yparc='auto')
+fit = pasta.pasta(x, y, coord, xparc="auto", yparc="auto") # Euclidean distance
+fit = pasta.pasta(x, y, coord, D=D, xparc="auto", yparc="auto") # input distance D in shape (N,N)
+fit = pasta.pasta(x, y, coord, D=D_triu, xparc="auto", yparc="auto") # input distance D_triu = D[np.triu_indices_from(D, k=1)]
+fit = pasta.pasta(x, y, coord, D=D, xparc="auto", yparc="auto", random_state=123, dim=2) # example with random state and geodesic distance dimmension, D is geodesic distance here
+pef, rX, nef = fit.pef, fit.rX, fit.nef
 ```
+
+---
+
+## Memory and computational time benchmark
+
+PaSTA estimates the covariance structure of data and has an $O(N^2)$ computational complexity in time and memory, where $N$ is the number of data points. 
+
+**Memory**
+
+Although memory can be a major concern when evaluating dense spatial maps, PaSTA optimized the memory use by processing square matrices in a blockwise manner (default block size 2,000) and avoided forming the memory-hard N-by-N matrices. 
+
+- By default, PaSTA computes Euclidean distance between data on-the-fly from their spatial coordinates to minimize memory burden, enabling autocorrelation correction on dense maps (e.g., fsaverage164k and MNI152 2mm GM voxels) with less than $2GB$ memory when the default block size of 2,000 is used. 
+
+- When a non-Euclidean (e.g., geodesic) distance metric is provided by the user, PaSTA will need more memory to store the distance input. The memory needed in practice depends on the format and precision of distance inputs, and the number of observations $N$. A typical modern personal laptop should be sufficient to evaluate moderately dense maps (e.g., civet41k and fsLR32k) with less than $6GB$ memory when using the default block size 2,000. Denser maps such as fsaverage164k may require workstation or cluster computing with more than $50GB$ memory.
+
+Table below displays memory needed to run PaSTA and PaSTA-NS when compute Euclidean distance on-the-fly, using an input upper triangular distance vector in single precision, and using an input full N-by-N distance matrix in double precision. The latter two represents the minimum and maximum memory requirement when a non-Euclidean distance metric is used. PaSTA and PaSTA-NS used the default block size of 2,000 and are compared to spin test.
+
+**Memory (GB) needed compared to spin test (1,000 surrogates)**
+
+![Memory comparison](figs/memory.svg)
+* Memory estimated by averaging 10 repetitive runs
+
+**Time**
+
+Despite the time complexity, PaSTA is typically faster than existing permutation methods that generate thousands of surrogates. 
+
+Using a **single core Intel(R) Xeon(R) Gold 6448H CPU**, PaSTA evaluates **fsaverage10k brain mesh in 30 seconds**, **fsLR32k in 5 minutes**, **fsaverage164k in 2 hours**, and **MNI152-2mm GM voxels in 3 hrs**.
+
+PaSTA-NS evaluates **fsaverage10k brain mesh in 50 seconds**, **fsLR32k in 7 minutess**, **fsaverage164k in 3 hours**, and **MNI152-2mm GM voxels in 3.5 hours**.
+
+Table below displays computational time of PaSTA and PaSTA-NS (using the default 2,000 block size), compared to spin test with 1,000 surrogates. 
+Gain in computational time is evident for sparse and moderately dense maps (fsLR4k to civet41k). The computational time of PaSTA / PaSTA-NS becomes comparable to spin test (1,000 surrogates) at fsaverage164k, but an improvement is expected when more surrogates are needed in permutation methods (e.g. 5,000 and more).
+
+**Time (seconds) needed compared to spin test (1,000 surrogates)**
+
+![Time comparison](figs/runtime.svg)
+* Spin test implementation from [Spin test GitHub](https://github.com/spin-test/spin-test)
+* Computational time evaluated using a single core Intel(R) Xeon(R) Gold 6448H with MATLAB 2023a
+* Computational time estimated by averaging 10 repetitive runs
+---
+
+## Documentation
+The Python version of brain-pasta 1.0.0 was developed with assistance from agentic AI (GPT 5.6), based on the matlab implementation and brain-pasta 0.0.0. The authors reviewed and validated the code before release, with test case including: 1. memory efficiency with 32k resolution (~3min on Mac M1 Pro); 2. distance matrix and vector inputs; 3. stationary and nonstationary data; 4. missing data. Results for example data are comparable between matlab and python implementations.
 
 ---
 

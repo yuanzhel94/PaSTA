@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.abspath(os.path.join("..", "..", "brain-pasta")))
 project = 'PaSTA'
 copyright = '2026, Yuanzhe Liu'
 author = 'Yuanzhe Liu'
-release = '0.0.0'
+release = '1.0.0'
 
 import sphinx_rtd_theme
 

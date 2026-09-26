@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: brain-pasta
+Version: 0.0.0
+Requires-Python: >=3.9
+Requires-Dist: numpy<2.0,>=1.26
+Requires-Dist: scipy>=1.13
+Requires-Dist: scikit-learn>=1.6
+Requires-Dist: scikit-learn-extra>=0.3
+Requires-Dist: setuptools
+Dynamic: requires-dist
+Dynamic: requires-python

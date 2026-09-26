@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "brain-pasta"
+version = "1.0.0"
+description = "Memory-efficient Parametric Spatial Test for Associations"
+requires-python = ">=3.9"
+dependencies = ["numpy>=1.26", "scipy>=1.13", "scikit-learn>=1.6"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

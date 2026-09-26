@@ -1,4 +1,5 @@
 README.md
+pyproject.toml
 setup.py
 brain_pasta.egg-info/PKG-INFO
 brain_pasta.egg-info/SOURCES.txt
@@ -6,4 +7,12 @@ brain_pasta.egg-info/dependency_links.txt
 brain_pasta.egg-info/requires.txt
 brain_pasta.egg-info/top_level.txt
 pasta/__init__.py
+pasta/legacy.py
 pasta/pasta.py
+pasta/types.py
+pasta/base/__init__.py
+pasta/block_operations/__init__.py
+pasta/config/__init__.py
+pasta/distance_euclidean/__init__.py
+pasta/distance_variable/__init__.py
+tests/test_pasta.py
