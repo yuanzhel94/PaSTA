@@ -153,12 +153,13 @@ Gain in computational time is evident for sparse and moderately dense maps (fsLR
 * Computational time estimated by averaging 10 repetitive runs
 ---
 
-## Acknowledgement
+## Disclaimer
 The Python version of brain-pasta 1.0.0 was developed with assistance from agentic AI (GPT 5.6), based on the matlab implementation and brain-pasta 0.0.0. The authors reviewed and validated the code before release, with test case including: 
 1. memory efficiency with 32k resolution (~3min on Mac M1 Pro); 
 2. distance matrix and vector inputs; 
 3. stationary and nonstationary data; 
-4. missing data. 
+4. missing data;
+5. parallel computing.
 
 Results for example test data are consistent between matlab and python implementations.
 
